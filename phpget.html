@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bugku PHP GET传参 Writeup</title>
+</head>
+<body>
+<h1>Bugku Web PHP GET传参</h1>
+<h2>题目信息</h2>
+<ul>
+    <li>平台：Bugku CTF</li>
+    <li>类型：Web</li>
+    <li>分值：10</li>
+    <li>题目链接：http://160.202.254.160:15733</li>
+</ul>
+<h2>考点</h2>
+<p>PHP GET参数传递，URL传参基础。</p>
+<h2>解题思路</h2>
+<p>页面源码使用$_GET读取URL里名叫what的参数，当what等于字符串flag，页面输出flag。</p>
+<h2>解题步骤</h2>
+<ol>
+    <li>查看页面源代码，分析PHP代码逻辑。</li>
+    <li>在网址末尾拼接 ?what=flag</li>
+    <li>访问拼接后的完整URL，页面直接返回flag。</li>
+</ol>
+<h2>Payload</h2>
+<p>?what=flag</p>
+<h2>Flag</h2>
+<p>flag{}</p>
+</body>
+</html>
