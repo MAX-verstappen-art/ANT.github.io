@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bugku POST传参 Writeup</title>
+    <style>
+        body {
+            background-color:#181926;
+            color:#e2e2e2;
+            font-family:system-ui;
+            max-width:800px;
+            margin:30px auto;
+            padding:0 20px;
+        }
+        a {color:#60a5fa;}
+        h1{color:#7dd3fc;}
+        h2{color:#a5b4fc;}
+        .flag{
+            background:#27293d;
+            padding:8px 12px;
+            border-radius:6px;
+            color:#4ade80;
+        }
+        .code{
+            background:#222436;
+            padding:10px;
+            border-radius:6px;
+            font-family:monospace;
+        }
+        .screenshot{
+            width:100%;
+            border:1px solid #444;
+            border-radius:8px;
+            margin:10px 0;
+        }
+    </style>
+</head>
+<body>
+<h1>Bugku Web POST传参</h1>
+<h2>题目信息</h2>
+<ul>
+    <li>平台：Bugku CTF</li>
+    <li>类型：Web</li>
+    <li>分值：10</li>
+    <li>题目链接：http://160.202.254.160:16477</li>
+</ul>
+<h2>考点</h2>
+<p>PHP POST参数接收，GET与POST请求的区别</p>
+<h2>源码分析</h2>
+<div class="code">
+$what=$_POST['what'];<br>
+echo $what;<br>
+if($what=='flag')<br>
+echo 'flag{****}';
+</div>
+<p>代码使用 <code>$_POST['what']</code> 获取POST请求中的what参数。
+当变量what的值等于字符串<code>flag</code>，就输出flag。
+<br>⚠️注意：$_POST读取的是请求体的数据，<strong>不能直接在网址栏加?what=flag</strong>，这样传的是GET参数，无法触发if判断。</p>
+
+<h2>解题思路</h2>
+<p>构造POST请求，提交数据 <code>what=flag</code>，服务端收到后满足判断条件，返回flag。</p>
+
+<h2>解题步骤</h2>
+<ol>
+    <li>访问靶场链接，查看页面源代码，发现使用$_POST接收what参数。</li>
+    <li>使用工具发送POST数据包，提交数据：<code>what=flag</code></li>
+    <li>服务器接收参数，if条件成立，页面返回flag。</li>
+</ol>
+<h3>方法1：浏览器F12控制台（无需插件）</h3>
+<div class="code">
+fetch("http://160.202.254.160:16477",{
+    method:"POST",
+    body:"what=flag",
+    headers:{"Content-Type":"application/x-www-form-urlencoded"}
+}).then(res=>res.text()).then(console.log)
+</div>
+<p>打开F12控制台，粘贴代码回车，返回结果中查看flag。</p>
+
+<h3>方法2：curl命令</h3>
+<div class="code">curl -X POST -d "what=flag" http://160.202.254.160:16477</div>
+
+<!--把你的截图上传仓库命名post.png，图片就会显示在这里-->
+<img src="post.png" alt="POST题目源码截图" class="screenshot">
+
+<h2>Payload</h2>
+<p class="code">what=flag</p>
+
+<h2>Flag</h2>
+<p class="flag">flag{}</p>
+</body>
+</html>
