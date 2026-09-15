@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Bugku PHP GET传参 Writeup</title>
+    <style>
+        body {
+            background-color:#181926;
+            color:#e2e2e2;
+            font-family:system-ui;
+            max-width:800px;
+            margin:30px auto;
+            padding:0 20px;
+        }
+        a {color:#60a5fa;}
+        h1{color:#7dd3fc;}
+        h2{color:#a5b4fc;}
+        .flag{
+            background:#27293d;
+            padding:8px 12px;
+            border-radius:6px;
+            color:#4ade80;
+        }
+        .code{
+            background:#222436;
+            padding:10px;
+            border-radius:6px;
+            font-family:monospace;
+        }
+        .screenshot{
+            width:100%;
+            border:1px solid #444;
+            border-radius:8px;
+            margin:10px 0;
+        }
+    </style>
+</head>
+<body>
+<h1>Bugku Web PHP GET传参</h1>
+<h2>题目信息</h2>
+<ul>
+    <li>平台：Bugku CTF</li>
+    <li>类型：Web</li>
+    <li>分值：10</li>
+    <li>题目链接：http://160.202.254.160:18642</li>
+</ul>
+<h2>考点</h2>
+<p>PHP GET参数传递，URL传参基础。</p>
+<h2>解题思路</h2>
+<p>源码使用 $_GET['what'] 读取URL中名叫what的参数。当what的值等于字符串flag，if条件成立，页面输出flag。</p>
+<h2>源码</h2>
+<div class="code">
+$what=$_GET['what'];<br>
+echo $what;<br>
+if($what=='flag')<br>
+echo 'flag{****}';
+</div>
+<h2>为什么是?what</h2>
+<p>URL里 <strong>?</strong> 代表后面开始携带参数。<br>
+what 是代码里写死的参数名称，$_GET['what'] 就是读取名为what的值。<br>
+格式：网址?参数名=参数值</p>
+<h2>解题步骤</h2>
+<ol>
+    <li>查看页面源代码，分析PHP代码逻辑。</li>
+    <li>在网址末尾拼接 <code>?what=flag</code></li>
+    <li>访问拼接后的完整URL，页面直接返回flag。</li>
+</ol>
+<!--上传截图命名phpget.png，打开图片显示-->
+<img src="phpget.png" alt="phpget源码截图" class="screenshot">
+<h2>Payload</h2>
+<p class="code">?what=flag</p>
+<h2>Flag</h2>
+<p class="flag">flag{}</p>
+</body>
+</html>
