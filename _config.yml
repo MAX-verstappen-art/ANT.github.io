@@ -1,3 +1,5 @@
 theme: minima
 title: My CTF Writeups
 description: Bugku CTF Web刷题记录
+url: "https://max-verstappen-art.github.io"
+baseurl: "/ANT.github.io"
