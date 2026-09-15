@@ -1,0 +1,29 @@
+---
+layout: post
+title: "Bugku CTF Web 滑稽 Writeup"
+date: 2026-09-13
+categories: CTF
+tags: Bugku Web 网页源码
+---
+
+# Bugku CTF Web《滑稽》题解
+## 题目信息
+- 平台：Bugku CTF
+- 题型：Web
+- 分值：10分
+- 题目地址：http://160.202.254.160:14565
+
+## 题目描述
+打开网页页面充满动态滑稽表情，肉眼看不到flag。考点：查看网页源代码。
+
+## 解题过程
+1. 访问题目链接，页面全是动态滑稽图，页面上看不到任何flag。
+2. 使用快捷键 `Ctrl + U` 打开网页源代码。
+3. 在源码页面 `Ctrl + F` 搜索 `flag`。
+4. 在HTML注释中找到flag。
+
+![源码截图](https://github.com/MAX-verstappen-art/ANT.github.io/raw/main/5c60f5fa4cd20e3a26ab563d804ea3d6.png)
+
+## Flag
+`flag{c17dfbb3509694fe524ac74dc2fc03d3}`
+
