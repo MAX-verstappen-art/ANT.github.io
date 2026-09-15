@@ -1,27 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>我的网络安全博客</title>
-    <style>
-        body {
-            background-color:#181926;
-            color:#e2e2e2;
-            font-family:system-ui;
-            max-width:800px;
-            margin:30px auto;
-            padding:0 20px;
-        }
-        a {color:#60a5fa;}
-    </style>
-</head>
-<body>
-    <h1>我的博客主页</h1>
-    <img src="huaji.jpg" alt="滑稽" style="width:100px;">
-    <ul>
-        <li><a href="1.html">点击查看我的第一个帖子</a></li>
-        <li><a href="calc.html">Bugku计算器 Writeup</a></li>
-        <li><a href="alert.html">Bugku alert Writeup</a></li>
-        <li><a href="phpget.html">Bugku PHP GET传参 Writeup</a></li>
-    </ul>
-</body>
-</html>
+---
+layout: post
+title: "Bugku CTF Web 滑稽 Writeup"
+date: 2026-09-13
+categories: CTF
+tags: Bugku Web 源码查看
+---
+
+# Bugku Web 滑稽 题解
+## 题目信息
+- 平台：Bugku CTF
+- 类型：Web
+- 分值：10分
+- 题目链接：http://160.202.254.160:14565
+
+## 解题思路
+打开网页，页面铺满动态滑稽表情，页面肉眼看不到flag。
+这道考点：**查看网页源代码，注释内隐藏flag**
+
+### 操作步骤
+1. 访问题目环境链接
+2. 使用快捷键 `Ctrl+U` 打开网页源代码
+3. 在源码页面按 `Ctrl+F`，搜索关键词 `flag`
+4. 在HTML注释中找到flag
+
+![网页源代码截图](5c60f5fa4cd20e3a26ab563d804ea3d6.png)
+
+## 得到flag
+`flag{c17dfbb3509694fe524ac74dc2fc03d3}`
+
+### 知识点
+前端页面的注释内容不会在网页上展示，但保存在源代码中，属于基础Web入门考点。
