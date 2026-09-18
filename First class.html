@@ -1,28 +1,57 @@
-# Bugku CTF 头等舱 Writeup
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>Bugku CTF｜头等舱 Writeup</title>
+<style>
+body {
+    font-family: system-ui, sans-serif;
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 20px;
+    line-height:1.7;
+}
+pre {
+    background:#f4f4f4;
+    padding:12px;
+    overflow-x:auto;
+}
+h1{font-size:26px;}
+h2{font-size:22px;margin-top:24px;}
+h3{font-size:18px;margin-top:18px;}
+</style>
+</head>
+<body>
+<h1>Bugku CTF 头等舱 Writeup</h1>
 
-## 题目信息
-- 平台：Bugku CTF
-- 分类：Web
-- 题目：头等舱
+<h2>题目信息</h2>
+<ul>
+<li>平台：Bugku CTF</li>
+<li>分类：Web</li>
+<li>题目：头等舱</li>
+</ul>
 
-## 题目现象
-访问页面，页面显示：`什么也没有。`
-查看网页源代码，无flag，页面无其他内容。
+<h2>题目现象</h2>
+<p>访问页面，页面显示：`什么也没有。`<br>
+查看网页源代码，无flag，页面无其他内容。</p>
 
-## 考察点
-读取HTTP响应头。
-> 题目名字“头等舱”提示：看HTTP头部(Header)，不是网页内容。
+<h2>考察点</h2>
+<p>读取HTTP响应头。<br>
+&gt; 题目名字“头等舱”提示：看HTTP头部(Header)，不是网页内容。</p>
 
-## 解题步骤
+<h2>解题步骤</h2>
+<h3>方式一：浏览器F12开发者工具</h3>
+<ol>
+<li>访问靶场链接，按 F12 打开开发者工具</li>
+<li>切换到「网络(Network)」选项卡</li>
+<li>F5刷新页面，捕获请求</li>
+<li>点击列表中第一条 document 请求</li>
+<li>在右侧面板切换至 <strong>响应头(Response Headers)</strong></li>
+<li>在头部列表找到自定义flag字段，取值即为flag</li>
+</ol>
 
-### 方式一：浏览器F12开发者工具
-1. 访问靶场链接，按`F12`打开开发者工具
-2. 切换到 `网络(Network)` 选项卡
-3. `F5`刷新页面，捕获请求
-4. 点击列表中第一条 document 请求
-5. 在右侧面板切换至 **响应头(Response Headers)**
-6. 在头部列表找到自定义flag字段，取值即为flag
+<h3>方式二：curl命令快速获取头部</h3>
+<pre>curl -I 靶场URL</pre>
 
-### 方式二：curl命令快速获取头部
-```bash
-curl -I 靶场URL
+</body>
+</html>
