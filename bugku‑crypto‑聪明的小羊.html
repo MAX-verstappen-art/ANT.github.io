@@ -1,27 +1,57 @@
-# Bugku‑Crypto｜聪明的小羊
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+<meta charset="UTF‑8">
+<title>Bugku‑Crypto｜聪明的小羊</title>
+<style>
+body{font‑family:system‑ui;max‑width:900px;margin:30px auto;padding:0 20px;line‑height:1.7;font‑size:16px;}
+h1{font‑size:26px;border‑bottom:1px solid #ccc;padding‑bottom:8px;}
+h2{font‑size:20px;margin‑top:28px;}
+ul{padding‑left:22px;}
+blockquote{background:#f6f6f6;padding:10px 14px;border‑left:4px #888 solid;}
+code{background:#eee;padding:2px 4px;border‑radius:3px;}
+</style>
+</head>
+<body>
 
-## 题目信息
-- 平台：Bugku CTF
-- 题型：Crypto 栅栏密码(Rail‑fence)
-- 题目描述：一只小羊翻过了2个栅栏
-- 密文：`fa{fe13f590lg6d46d0d0}`
+<h1>Bugku‑Crypto｜聪明的小羊</h1>
 
-## 解题思路
-提示“翻过2个栅栏”代表栅栏密码，栏数=2。
-栅栏密码分为**标准型**和**W型(之字形)**，本题加密使用W模式，选错模式会得到错误flag。
+<h2>题目信息</h2>
+<ul>
+<li>平台：Bugku CTF</li>
+<li>题型：Crypto 栅栏密码(Rail‑fence)</li>
+<li>题目描述：一只小羊翻过了2个栅栏</li>
+<li>密文：<code>fa{fe13f590lg6d46d0d0}</code></li>
+</ul>
+
+<h2>解题思路</h2>
+<p>提示“翻过2个栅栏”代表栅栏密码，栏数=2。<br>
+栅栏密码分为<strong>标准型</strong>和<strong>W型(之字形)</strong>，本题加密使用W模式，选错模式会得到错误flag。<br>
 密文被拆分成上下两行，按Z字形路径读取字符恢复明文。
+</p>
 
-## 解题步骤
-1. 复制题目密文：`fa{fe13f590lg6d46d0d0}`
-2. 打开Bugku自带栅栏密码工具 https://ctf.bugku.com/tool/railfence
-3. 粘贴密文，栏数设置为`2`，选择**W型解密**，点击解密。
-4. 得到flag。
+<h2>解题步骤</h2>
+<ol>
+<li>复制题目密文：<code>fa{fe13f590lg6d46d0d0}</code></li>
+<li>打开Bugku自带栅栏密码工具 https://ctf.bugku.com/tool/railfence</li>
+<li>粘贴密文，栏数设置为<code>2</code>，选择<strong>W型解密</strong>，点击解密。</li>
+<li>得到flag。</li>
+</ol>
 
->坑点：
->1. 手解极易混淆数字、字母顺序，优先复制工具输出。
->2. 栅栏密码两种模式，选错模式得到的字符串提交会提示flag错误。
->3. 复制flag后建议粘贴到记事本，清除多余换行、空格再提交平台。
+<blockquote>
+坑点：
+<ul>
+<li>手解极易混淆数字、字母顺序，优先复制工具输出。</li>
+<li>栅栏密码两种模式，选错模式得到的字符串提交会提示flag错误。</li>
+<li>复制flag后建议粘贴到记事本，清除多余换行、空格再提交平台。</li>
+</ul>
+</blockquote>
 
-## 考点总结
-1. Rail‑fence栅栏密码，根据提示确定栏数。
-2. 区分栅栏密码：标准模式 / W(zig‑zag)模式。
+<h2>考点总结</h2>
+<ol>
+<li>Rail‑fence栅栏密码，根据提示确定栏数。</li>
+<li>区分栅栏密码：标准模式 / W(zig‑zag)模式。</li>
+</ol>
+
+</body>
+</html>
