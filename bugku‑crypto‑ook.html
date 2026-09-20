@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+    <meta charset="UTF‑8">
+    <title>Bugku‑Crypto｜ok Ook!编码</title>
+    <style>
+        body {
+            font-family: system‑ui, sans‑serif;
+            max‑width:920px;
+            margin:40px auto;
+            padding:0 24px;
+            line‑height:1.8;
+        }
+        h1{font‑size:24px;margin‑bottom:12px;}
+        h2{font‑size:20px;margin‑top:28px;margin‑bottom:10px;}
+        pre{
+            background:#f3f3f3;
+            padding:14px;
+            border‑radius:6px;
+            overflow‑x:auto;
+        }
+    </style>
+</head>
+<body>
+<h1>Bugku CTF‑Crypto｜ok Ook!编码 Writeup</h1>
+
+<h2>题目信息</h2>
+<ul>
+<li>平台：Bugku CTF</li>
+<li>题型：Crypto密码学 Ook!语言</li>
+<li>题目名称：ok</li>
+<li>分值：10分</li>
+<li>作者：harry</li>
+</ul>
+
+<h2>题目分析</h2>
+<p>题目描述提示 <code>Ook.</code>，代表本题是Ook!编码。
+Ook! 属于Brainfuck衍生语言，全部指令只有 Ook. Ook? Ook!，两条指令组成一条操作，人工破译难度大，依靠在线解释器运行代码得到输出。</p>
+
+<h2>解题步骤</h2>
+<ol>
+<li>点击页面下载按钮，下载题目附件，复制附件完整Ook代码。</li>
+<li>打开Ook在线解密工具，选择 Ook! to Text。</li>
+<li>粘贴全部Ook代码，执行运行。</li>
+<li>程序输出flag：
+<pre>flag{0a394df55312c51a}</pre>
+</li>
+<li>复制flag直接提交平台。</li>
+</ol>
+
+<h2>踩坑总结</h2>
+<ul>
+<li>复制代码不能丢 `. ? !` 标点符号，符号错误直接乱码。</li>
+<li>输出flag全部小写，不要改动字符。</li>
+<li>换行空格属于排版，无需手动删除。</li>
+</ul>
+
+<h2>考点总结</h2>
+<ul>
+<li>识别Ook!编码特征字符串</li>
+<li>Ook!与Brainfuck关系</li>
+<li>在线解释器工具使用</li>
+</ul>
+</body>
+</html>
