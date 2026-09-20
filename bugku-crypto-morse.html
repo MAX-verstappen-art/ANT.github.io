@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>Bugku‑Crypto｜/.- 摩斯密码</title>
+    <style>
+        body {
+            font-family: system-ui, sans‑serif;
+            max-width:920px;
+            margin:40px auto;
+            padding:0 24px;
+            line-height:1.8;
+        }
+        h1{font-size:24px;margin-bottom:12px;}
+        h2{font-size:20px;margin-top:28px;margin-bottom:10px;}
+        h3{font-size:17px;margin-top:20px;}
+        pre{
+            background:#f3f3f3;
+            padding:14px;
+            border‑radius:6px;
+            overflow‑x:auto;
+        }
+    </style>
+</head>
+<body>
+<h1>Bugku CTF‑Crypto｜/.- 摩斯密码 Writeup</h1>
+
+<h2>题目信息</h2>
+<ul>
+<li>平台：Bugku CTF</li>
+<li>题型：Crypto密码学</li>
+<li>题目名称：/.-</li>
+<li>分值：10分</li>
+<li>作者：harry</li>
+</ul>
+
+<h2>题目分析</h2>
+<p>题目给出由点 <code>.</code>、横杠 <code>-</code>、斜杠 <code>/</code> 分割字符串，标准<strong>摩斯密码(Morse Code)</strong>。
+<code>/</code>用来分隔每一个字符摩斯编码。</p>
+
+<h2>解题步骤</h2>
+<ol>
+<li>复制题目描述全部密文：
+<pre>..-./.-../.-/--./----.--/-../...--/..-./-.-./-.../..-./.----/--.../..-./----./...--/----./----./...../-----/....-/-----.-</pre>
+</li>
+<li>打开Bugku在线摩斯解密工具，Space分隔符填 <code>/</code>，Short填<code>.</code>，Long填<code>-</code>，点击解密。</li>
+<li>解密输出：<code>FLAG%u7bD3FCBF17F9399504%u7d</code></li>
+<li>解析Unicode编码：
+<ul>
+<li><code>%u7b</code> 对应字符 <code>{</code></li>
+<li><code>%u7d</code> 对应字符 <code>}</code></li>
+</ul>
+</li>
+<li>还原大括号，所有字母转为小写，得到最终flag：
+<pre>flag{d3fcbf17f9399504}</pre>
+</li>
+<li>复制flag提交平台。</li>
+</ol>
+
+<h2>踩坑总结</h2>
+<ul>
+<li>解密结果包含unicode编码，不是直接可读明文，需要手动还原大括号{}。</li>
+<li>中间十六进制字符<strong>必须全部小写</strong>，大写提交判定错误。</li>
+<li>flag前缀是小写flag，不是大写FLAG。</li>
+<li>工具分隔符Space必须填写 <code>/</code>，否则解密乱码。</li>
+</ul>
+
+<h2>考点总结</h2>
+<ul>
+<li>识别摩斯密码特征符号 . -</li>
+<li>摩斯密码在线工具参数配置</li>
+<li>认识Unicode %u 编码转义</li>
+<li>CTF常见坑：大小写、特殊字符被编码隐藏</li>
+</ul>
+
+</body>
+</html>
