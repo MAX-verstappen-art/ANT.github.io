@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+    <meta charset="UTF‑8">
+    <title>Bugku‑Crypto｜Brainfuck [+-<>]</title>
+    <style>
+        body {
+            font-family: system‑ui, sans‑serif;
+            max‑width:920px;
+            margin:40px auto;
+            padding:0 24px;
+            line‑height:1.8;
+        }
+        h1{font‑size:24px;margin‑bottom:12px;}
+        h2{font‑size:20px;margin‑top:28px;margin‑bottom:10px;}
+        pre{
+            background:#f3f3f3;
+            padding:14px;
+            border‑radius:6px;
+            overflow‑x:auto;
+        }
+    </style>
+</head>
+<body>
+<h1>Bugku CTF‑Crypto｜[+-<>] Brainfuck Writeup</h1>
+
+<h2>题目信息</h2>
+<ul>
+<li>平台：Bugku CTF</li>
+<li>题型：Crypto密码学 Brainfuck编程语言</li>
+<li>题目名称：[+-<>]</li>
+<li>分值：10分</li>
+<li>作者：harry</li>
+</ul>
+
+<h2>题目分析</h2>
+<p>页面直接给出Brainfuck源码，特征符号：<code>+ - &lt; &gt; [ ] . ,</code>。
+Brainfuck是极简的晦涩编程语言，人工阅读困难，直接使用在线解释器执行代码，打印输出flag。</p>
+
+<h2>解题步骤</h2>
+<ol>
+<li>复制题目描述框中全部Brainfuck代码。</li>
+<li>打开Brainfuck在线解释器，粘贴全部代码。</li>
+<li>点击运行，程序输出flag。</li>
+<li>复制结果提交平台。
+<pre>flag{brain_fuck_is_interesting}</pre>
+</li>
+</ol>
+
+<h2>踩坑总结</h2>
+<ul>
+<li>中括号<code>[ ]</code>是循环指令，丢失会直接输出乱码。</li>
+<li>空格、换行属于空白字符，解释器会自动忽略。</li>
+<li>不要手动推演代码，极易出错。</li>
+</ul>
+
+<h2>考点总结</h2>
+<ul>
+<li>识别Brainfuck代码特征符号</li>
+<li>BF在线解释器使用</li>
+</ul>
+</body>
+</html>
