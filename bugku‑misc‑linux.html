@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+<meta charset="utf‑8">
+<title>Bugku‑Misc｜linux</title>
+<style>
+body{max‑width:900px;margin:2em auto;padding:0 1em;font‑family:system‑ui,SimHei,sans‑serif;line‑height:1.6;}
+pre{background:#222;color:#0f0;padding:12px;overflow‑x:auto;border‑radius:6px;}
+h1,h2{border‑bottom:1px solid #ccc;padding‑bottom:0.3em;}
+ul{padding‑left:1.5em;}
+</style>
+</head>
+<body>
+<h1>Bugku‑Misc｜linux</h1>
+
+<h2>题目信息</h2>
+<ul>
+<li>平台：Bugku CTF</li>
+<li>题型：Misc 杂项</li>
+<li>题目：linux</li>
+<li>难度：新手入门</li>
+</ul>
+
+<h2>题目描述</h2>
+<p>给了一个压缩包附件，寻找flag。</p>
+
+<h2>解题步骤</h2>
+<ol>
+<li>下载附件 <code>linux.zip</code>。</li>
+<li>使用unzip解压zip包：
+<pre>unzip linux.zip</pre>
+解压得到 <code>linux/</code> 文件夹，里面是 <code>1.tar.gz</code>。</li>
+
+<li>解压tar压缩包：
+<pre>cd linux
+tar -zxvf 1.tar.gz
+ls</pre>
+得到 <code>test/</code> 目录。</li>
+
+<li>进入test目录，使用strings读取镜像文件可读字符串：
+<pre>cd test
+strings flag</pre>
+</li>
+
+<li>输出内容中包含回收站Trash元数据，提取MD5哈希字符串：
+<pre>key{feb81d3834e2423c9903f4755464060b}</pre>
+</li>
+
+<li>对MD5值 <code>feb81d3834e2423c9903f4755464060b</code> 进行解密，得到明文flag。</li>
+</ol>
+
+<h2>考点分析</h2>
+<ul>
+<li>多层压缩包嵌套解压（zip + tar.gz）</li>
+<li><code>strings</code> 工具提取二进制镜像内可读字符串</li>
+<li>Linux ext文件系统回收站 .Trash 元数据信息泄露</li>
+<li>MD5哈希解密</li>
+</ul>
+
+<h2>Flag</h2>
+<p><code>flag{crypt}</code></p>
+
+</body>
+</html>
