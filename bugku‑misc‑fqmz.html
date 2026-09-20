@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+<meta charset="utf‑8">
+<title>Bugku‑Misc｜富强民主</title>
+<style>
+body{max‑width:900px;margin:2em auto;padding:0 1em;font‑family:system‑ui,SimHei,sans‑serif;line‑height:1.6;}
+pre{background:#222;color:#0f0;padding:12px;overflow‑x:auto;border‑radius:6px;}
+h1,h2{border‑bottom:1px solid #ccc;padding‑bottom:0.3em;}
+ul,ol{padding‑left:1.5em;}
+</style>
+</head>
+<body>
+<h1>Bugku‑Misc｜富强民主</h1>
+
+<h2>题目信息</h2>
+<ul>
+<li>平台：Bugku CTF</li>
+<li>题型：Misc 杂项</li>
+<li>题目：富强民主</li>
+<li>难度：新手入门</li>
+</ul>
+
+<h2>题目描述</h2>
+<p>题目描述栏全部是社会主义核心价值观词语，没有附件。</p>
+
+<h2>解题步骤</h2>
+<ol>
+<li>复制题目描述框全部文本密文：
+<pre>公正公正公正诚信文明公正民主公正法治法治友善平等和谐敬业和谐富强和谐富强和谐文明和谐平等公正公正和谐法治公正公正公正文明和谐民主和谐敬业和谐平等和谐敬业和谐敬业和谐和谐和谐公正法治友善法治</pre>
+</li>
+<li>这是<strong>核心价值观编码</strong>，专门的CTF编码。打开在线解密工具，粘贴全部文字进行解密。</li>
+<li>解密后直接得到flag。</li>
+</ol>
+
+<h2>考点分析</h2>
+<ul>
+<li>核心价值观编码（CVencode），用富强、民主、文明、和谐等词语代表二进制比特位，组合成字符。</li>
+<li>观察题干，没有附件，密文就在题目描述文本。</li>
+</ul>
+
+<h2>Flag</h2>
+<p><code>flag{90025f7fb1959936}</code></p>
+
+</body>
+</html>
