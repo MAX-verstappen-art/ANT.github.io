@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BugkuCTF Writeup - Ook! Brainfuck解密</title>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            background-color: #ffffff;
+            color:#24292f;
+            line-height:1.65;
+        }
+        h1,h2,h3 {
+            border-bottom: 1px solid #e5e7eb;
+            padding-bottom: 0.4rem;
+        }
+        pre {
+            background-color:#f6f8fa;
+            padding:16px;
+            border-radius:6px;
+            overflow-x:auto;
+            border:1px solid #e5e7eb;
+        }
+        code {
+            font-family:Consolas,Monaco,monospace;
+            background-color:#f1f3f4;
+            padding:2px 6px;
+            border-radius:3px;
+        }
+        pre code {
+            background:none;
+            padding:0;
+        }
+        .note{
+            background:#fff8dc;
+            border-left:4px solid #f0c848;
+            padding:12px 16px;
+            margin:1rem 0;
+        }
+    </style>
+</head>
+<body>
+
+<h1>BugkuCTF Writeup｜Ook! Brainfuck 解密</h1>
+
+<h2>题目信息</h2>
+<ul>
+<li>平台：BugkuCTF</li>
+<li>考点：Ook! 语言转 BrainFuck，Brainfuck 解密</li>
+<li>最终 Flag：<code>flag{bugku_jiami}</code></li>
+</ul>
+
+<h2>题目分析</h2>
+<div class="note">
+Ook! 是 BrainFuck 的趣味变体，使用 <code>Ook.</code> <code>Ook?</code> <code>Ook!</code> 组合来映射 Brainfuck 的8种指令。
+Ook! 本身不能直接执行，需要先转换为标准 Brainfuck 代码，再对 BF 代码解密运行，得到明文 flag。
+</div>
+
+<p>拿到题目密文是 Ook! 格式字符串，无法直接阅读。解题分为两步：</p>
+<ol>
+<li>Ook! → Brainfuck 源码转换</li>
+<li>执行/解密 Brainfuck 代码输出明文</li>
+</ol>
+
+<h2>解题过程</h2>
+<h3>步骤1：Ook! To Text 工具转换</h3>
+<p>使用在线 Brainfuck/Ook 工具，选择功能 <strong>Ook to Text</strong>。</p>
+<p>将题目给出完整 Ook! 密文粘贴输入框，工具内部先完成 Ook! → Brainfuck 指令映射，之后解释执行 Brainfuck 程序。</p>
+
+<pre>
+<!-- 这里你可以把原题Ook密文粘贴进来 -->
+Ook! Ook. Ook? Ook. Ook! Ook! ...
+</pre>
+
+<h3>步骤2：运行得到输出</h3>
+<p>工具直接输出执行后的明文结果，得到完整flag：</p>
+<pre>flag{bugku_jiami}</pre>
+
+<h2>原理补充</h2>
+<p>Ook! 和 Brainfuck 指令一一对应映射关系：</p>
+<pre>
+Ook. Ook.   →  >
+Ook. Ook?   →  <
+Ook? Ook.   →  +
+Ook? Ook?   →  -
+Ook! Ook.   →  .
+Ook. Ook!   →  ,
+Ook! Ook?   →  [
+Ook? Ook!   →  ]
+</pre>
+
+<p>简单理解：Ook! 只是 BF 的“搞笑外壳”，本质完全等价 Brainfuck。
+如果没有一键工具，可以先手动把所有Ook序列翻译成标准BF代码，再运行BF解释器，同样得到flag。</p>
+
+<h2>工具链接</h2>
+<ul>
+<li>Brainfuck / Ook 在线解密：Brainfuck在线解释器</li>
+<li>CyberChef：可自定义Recipe处理Ook!与Brainfuck</li>
+</ul>
+
+<h2>总结</h2>
+<p>这道题考察小众趣味Esoteric Language（晦涩语言）。遇到Ook!记住核心思路：<strong>Ook!不是独立加密，先转Brainfuck再运行</strong>。
+不要尝试直接对Ook字符做编码解码，必须走指令转换。</p>
+
+</body>
+</html>
