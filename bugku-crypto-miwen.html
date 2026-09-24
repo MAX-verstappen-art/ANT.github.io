@@ -1,32 +1,59 @@
 <!DOCTYPE html>
-<html lang="zh‑CN">
+<html lang="zh-CN">
 <head>
-<meta charset="utf‑8">
-<title>Bugku‑散乱的密文 WriteUp</title>
+    <meta charset="utf-8">
+    <title>Bugku‑散乱的密文 WriteUp</title>
 </head>
 <body>
-<h1> Bugku‑散乱的密文 Writeup</h1>
+<h1>Bugku‑散乱的密文 Writeup</h1>
 <h2>题目信息</h2>
 <ul>
-<li>题目名称：散乱的密文</li>
-<li>题目类型：Crypto</li>
+    <li>题目名称：散乱的密文</li>
+    <li>题目类型：Crypto</li>
+    <li>题目描述：一段被打乱顺序的密文，找出原始flag</li>
 </ul>
-<h2>解题思路</h2>
-<p>题目给出的数字序列为 <strong>**6位分组置换规则**</strong>，含义为每6个字符为一组，按照顺序 <code>2 1 6 5 3 4</code> 进行位置打乱。</p>
-<p>将规则转为程序下标（从0开始）加密顺序：<code>[1, 0, 5, 4, 2, 3]</code>。</p>
-<p>通过逆置换恢复每组字符顺序即可得到明文，最后剔除干扰字符。</p>
 
-<h2>EXP</h2>
+<h2>解题思路</h2>
+<p>题目给出分组置换规则：**6位分组置换**，含义为每6个字符作为一组，按照顺序 <code>2 1 6 5 3 4</code> 进行位置打乱。</p>
+<p>加密下标（从0开始）加密顺序：<code>[1, 0, 5, 4, 2, 3]</code></p>
+<p>加密时每组原位置：0→1，1→0，2→5，3→4，4→2，5→3</p>
+<p>想要解密，需要推导逆置换，将每组字符还原顺序，最后剔除干扰字符，得到flag。</p>
+
+<h2>密文</h2>
+<pre>cipher = "If5{ag024c483549d7fd@1}"</pre>
+
+<h2>Python解密EXP</h2>
 <pre>
 cipher = "If5{ag024c483549d7fd@1}"
-order = [1, 0, 5, 4, 2, 3]
+# 加密顺序 [1,0,5,4,2,3]，求逆置换
+encrypt_order = [1, 0, 5, 4, 2, 3]
+# 构造解密逆映射
+decrypt_order = [0]*6
+for plain_idx,cipher_idx in enumerate(encrypt_order):
+    decrypt_order[cipher_idx] = plain_idx
+
 res = ""
+# 按6字符分组
 for i in range(0, len(cipher), 6):
     block = cipher[i:i+6]
     if len(block) == 6:
-        block = ''.join([block[x] for x in order])
-    res += block
+        new_block = ''.join([block[x] for x in decrypt_order])
+        res += new_block
+    else:
+        res += block
+
 print(res)
 </pre>
+
+<h2>脚本运行结果</h2>
+<pre>flag{024ac4835497dfd1}</pre>
+
+<h2>原理说明</h2>
+<p>1.加密：明文块 [p0,p1,p2,p3,p4,p5] → 根据 encrypt_order[1,0,5,4,2,3]，输出 [p1,p0,p5,p4,p2,p3]（密文块）</p>
+<p>2.解密：拿到密文块，使用逆置换 decrypt_order，把密文每个位置放回原始明文位置。</p>
+<p>3.分组结束后剩余不足6位的字符直接拼接，最后得到完整flag。</p>
+
+<br>
+<a href="./index.html">← 返回博客主页</a>
 </body>
 </html>
