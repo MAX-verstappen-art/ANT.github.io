@@ -1,31 +1,357 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-    <title>Bugku alert Writeup</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bugku Crypto - 这里填写题目名 Writeup | 陆楷中</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f1115;
+            color: #e6edf3;
+            font-family: "JetBrains Mono", "Fira Code", Consolas, system-ui, -apple-system, sans-serif;
+            max-width: 960px;
+            margin: 48px auto;
+            padding: 0 20px;
+            line-height: 1.8;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            color: #79c0ff;
+            text-decoration: none;
+            background: #161b22;
+            border: 1px solid #30363d;
+            transition: all 0.15s ease-out;
+        }
+
+        .back-btn:hover {
+            border-color: #39d353;
+            color: #39d353;
+            transform: translateX(-4px);
+        }
+
+        .back-btn:active {
+            transform: scale(0.97);
+            background: #21262d;
+        }
+
+        /* 头部终端卡片 */
+        .terminal-header {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+            margin-bottom: 32px;
+        }
+
+        .terminal-bar {
+            background: #21262d;
+            padding: 10px 16px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .terminal-content {
+            padding: 28px;
+        }
+
+        .terminal-content .category {
+            font-size: 13px;
+            color: #8b949e;
+            margin-bottom: 8px;
+        }
+
+        .terminal-content h1 {
+            font-size: 28px;
+            color: #39d353;
+            margin-bottom: 10px;
+        }
+
+        .terminal-content .subtitle {
+            color: #79c0ff;
+            font-size: 14px;
+        }
+
+        /* 正文卡片 */
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+            transition: border-color 0.2s ease-out;
+        }
+
+        .card:hover {
+            border-color: #30363d;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #58a6ff;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #30363d;
+        }
+
+        h3 {
+            font-size: 16px;
+            color: #39d353;
+            margin: 18px 0 10px;
+        }
+
+        p {
+            margin-bottom: 12px;
+            color: #c9d1d9;
+        }
+
+        ul, ol {
+            padding-left: 22px;
+            margin-bottom: 12px;
+            color: #c9d1d9;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* 行内代码 */
+        code {
+            font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+            background: #21262d;
+            color: #ffa657;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 14px;
+            border: 1px solid #30363d;
+        }
+
+        /* 代码块 */
+        pre {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 18px 20px;
+            overflow-x: auto;
+            margin: 14px 0 18px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: #e6edf3;
+        }
+
+        /* Flag 高亮 */
+        .flag-box {
+            background: linear-gradient(135deg, #0d1117, #161b22);
+            border: 1px solid #39d353;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .flag-label {
+            color: #39d353;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .flag-value {
+            color: #ffa657;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            word-break: break-all;
+        }
+
+        /* 提示框 */
+        .tip {
+            background: #21262d;
+            border-left: 4px solid #f0c848;
+            padding: 14px 18px;
+            border-radius: 8px;
+            color: #e6edf3;
+            margin: 14px 0;
+        }
+
+        .tip strong {
+            color: #f0c848;
+        }
+
+        /* 底部署名 */
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #30363d;
+            text-align: center;
+            color: #8b949e;
+            font-size: 13px;
+        }
+
+        /* 点击反馈 */
+        a, button {
+            transition: transform 0.12s ease-out, background 0.15s ease-out, border-color 0.15s ease-out;
+        }
+
+        a:active, button:active {
+            transform: scale(0.97);
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #161b22;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #484f58;
+        }
+    </style>
 </head>
 <body>
-<h1>Bugku Web alert</h1>
-<h2>题目信息</h2>
-<ul>
-    <li>平台：Bugku CTF</li>
-    <li>类型：Web</li>
-    <li>分值：10</li>
-    <li>题目链接：http://160.202.254.160:14880</li>
-</ul>
-<h2>考点</h2>
-<p>JS弹窗干扰、网页源码查看、HTML实体编码解码。</p>
-<h2>解题思路</h2>
-<p>打开页面会无限弹出alert弹窗，flag不在弹窗里面，藏在网页源代码底部，是HTML十进制实体编码，需要解码还原出flag。</p>
-<h2>解题步骤</h2>
-<ol>
-    <li>访问 view-source:题目链接，直接看源码，避开弹窗JS执行。</li>
-    <li>滚动到页面最底部，复制以&#开头的HTML实体字符串。</li>
-    <li>打开HTML实体解码工具，选择【实体→文本】。</li>
-    <li>粘贴编码串，解码拿到flag。</li>
-</ol>
-<h2>原始编码串</h2>
-<p>&#102;&#108;&#97;&#103;&#123;&#49;&#97;&#55;&#100;&#101;&#99;&#51;&#51;&#49;&#102;&#53;&#52;&#99;&#48;&#100;&#55;&#53;&#54;&#49;&#52;&#56;&#54;&#53;&#53;&#56;&#99;&#55;&#51;&#97;&#50;&#57;&#99;&#125;</p>
-<h2>Flag</h2>
-<p>flag{1a7dec331f54c0d7561486558c753a29c}</p>
+
+    <a href="./index.html" class="back-btn">← 返回首页</a>
+
+    <!-- 头部终端卡片 -->
+    <div class="terminal-header">
+        <div class="terminal-bar">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+        </div>
+        <div class="terminal-content">
+            <div class="category">BugkuCTF / Crypto / Writeup</div>
+            <h1>这里填写题目名</h1>
+            <div class="subtitle">作者：陆楷中 | 解题日期：2026-09-24</div>
+        </div>
+    </div>
+
+    <!-- 题目信息 -->
+    <div class="card">
+        <h2>题目信息</h2>
+        <ul>
+            <li><strong>平台：</strong>BugkuCTF</li>
+            <li><strong>类型：</strong>Crypto</li>
+            <li><strong>考点：</strong>这里填写本题考点</li>
+            <li><strong>Flag：</strong></li>
+        </ul>
+
+        <div class="flag-box">
+            <span class="flag-label">FLAG</span>
+            <span class="flag-value">flag{这里填写你的真实flag}</span>
+        </div>
+    </div>
+
+    <!-- 题目描述 -->
+    <div class="card">
+        <h2>题目描述</h2>
+        <p>这里粘贴题目描述。</p>
+    </div>
+
+    <!-- 解题思路 -->
+    <div class="card">
+        <h2>解题思路</h2>
+
+        <h3>步骤 1：分析密文特征</h3>
+        <p>首先观察密文字符集、长度、分组方式和特殊符号分布，判断可能属于哪一类密码变换。</p>
+
+        <h3>步骤 2：尝试对应解密方法</h3>
+        <ul>
+            <li>根据字符特征判断是否为移位、替换、Base 类或自定义编码。</li>
+            <li>若存在明显分组，尝试按位置重组。</li>
+            <li>若涉及字符表映射，先构造替换表再批量解密。</li>
+        </ul>
+
+        <h3>步骤 3：编写脚本验证</h3>
+        <p>确认规则后编写脚本，将密文批量转换为候选明文，并提取 Flag。</p>
+
+        <div class="tip">
+            <strong>提示：</strong>先判断密码类型，再写脚本，可以减少无效尝试。
+        </div>
+    </div>
+
+    <!-- 脚本实现 -->
+    <div class="card">
+        <h2>解密脚本</h2>
+        <pre><code># 这里粘贴你的 Python 脚本
+ciphertext = "密文"
+plaintext = ""
+
+# 按题目实际规则修改
+for ch in ciphertext:
+    plaintext += ch
+
+print(plaintext)</code></pre>
+    </div>
+
+    <!-- 运行结果 -->
+    <div class="card">
+        <h2>运行结果</h2>
+        <pre><code>flag{这里填写你的真实flag}</code></pre>
+    </div>
+
+    <!-- 原理说明 -->
+    <div class="card">
+        <h2>原理说明</h2>
+        <ul>
+            <li>本题的核心是识别密文采用的变换规则。</li>
+            <li>脚本负责将规则自动化，避免手工替换出错。</li>
+            <li>只要规则正确，密文即可还原为可读明文。</li>
+            <li>最终以 <code>flag{...}</code> 格式作为解密成功标志。</li>
+        </ul>
+    </div>
+
+    <!-- 总结 -->
+    <div class="card">
+        <h2>总结</h2>
+        <p>这道题的关键不在于复杂算法，而在于快速判断密文类型并找到正确还原规则。先观察、再分类、最后脚本验证，是 Crypto 题比较高效的解题顺序。</p>
+    </div>
+
+    <footer>
+        © 2026 陆楷中 | CTF Writeup Archive
+    </footer>
+
 </body>
 </html>
