@@ -1,65 +1,361 @@
 <!DOCTYPE html>
-<html lang="zh‑CN">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF‑8">
-    <title>Bugku‑Crypto｜ok Ook!编码</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bugku Crypto - 散乱的密文 Writeup | 陆楷中</title>
     <style>
-        body {
-            font-family: system‑ui, sans‑serif;
-            max‑width:920px;
-            margin:40px auto;
-            padding:0 24px;
-            line‑height:1.8;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        h1{font‑size:24px;margin‑bottom:12px;}
-        h2{font‑size:20px;margin‑top:28px;margin‑bottom:10px;}
-        pre{
-            background:#f3f3f3;
-            padding:14px;
-            border‑radius:6px;
-            overflow‑x:auto;
+
+        body {
+            background: #0f1115;
+            color: #e6edf3;
+            font-family: "JetBrains Mono", "Fira Code", Consolas, system-ui, -apple-system, sans-serif;
+            max-width: 960px;
+            margin: 48px auto;
+            padding: 0 20px;
+            line-height: 1.8;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            color: #79c0ff;
+            text-decoration: none;
+            background: #161b22;
+            border: 1px solid #30363d;
+            transition: all 0.15s ease-out;
+        }
+
+        .back-btn:hover {
+            border-color: #39d353;
+            color: #39d353;
+            transform: translateX(-4px);
+        }
+
+        .back-btn:active {
+            transform: scale(0.97);
+            background: #21262d;
+        }
+
+        /* 头部终端卡片 */
+        .terminal-header {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+            margin-bottom: 32px;
+        }
+
+        .terminal-bar {
+            background: #21262d;
+            padding: 10px 16px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .terminal-content {
+            padding: 28px;
+        }
+
+        .terminal-content .category {
+            font-size: 13px;
+            color: #8b949e;
+            margin-bottom: 8px;
+        }
+
+        .terminal-content h1 {
+            font-size: 28px;
+            color: #39d353;
+            margin-bottom: 10px;
+        }
+
+        .terminal-content .subtitle {
+            color: #79c0ff;
+            font-size: 14px;
+        }
+
+        /* 正文卡片 */
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+            transition: border-color 0.2s ease-out;
+        }
+
+        .card:hover {
+            border-color: #30363d;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #58a6ff;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #30363d;
+        }
+
+        h3 {
+            font-size: 16px;
+            color: #39d353;
+            margin: 18px 0 10px;
+        }
+
+        p {
+            margin-bottom: 12px;
+            color: #c9d1d9;
+        }
+
+        ul, ol {
+            padding-left: 22px;
+            margin-bottom: 12px;
+            color: #c9d1d9;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* 行内代码 */
+        code {
+            font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+            background: #21262d;
+            color: #ffa657;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 14px;
+            border: 1px solid #30363d;
+        }
+
+        /* 代码块 */
+        pre {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 18px 20px;
+            overflow-x: auto;
+            margin: 14px 0 18px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: #e6edf3;
+        }
+
+        /* Flag 高亮 */
+        .flag-box {
+            background: linear-gradient(135deg, #0d1117, #161b22);
+            border: 1px solid #39d353;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .flag-label {
+            color: #39d353;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .flag-value {
+            color: #ffa657;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            word-break: break-all;
+        }
+
+        /* 提示框 */
+        .tip {
+            background: #21262d;
+            border-left: 4px solid #f0c848;
+            padding: 14px 18px;
+            border-radius: 8px;
+            color: #e6edf3;
+            margin: 14px 0;
+        }
+
+        .tip strong {
+            color: #f0c848;
+        }
+
+        /* 底部署名 */
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #30363d;
+            text-align: center;
+            color: #8b949e;
+            font-size: 13px;
+        }
+
+        /* 点击反馈 */
+        a, button {
+            transition: transform 0.12s ease-out, background 0.15s ease-out, border-color 0.15s ease-out;
+        }
+
+        a:active, button:active {
+            transform: scale(0.97);
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #161b22;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #484f58;
         }
     </style>
 </head>
 <body>
-<h1>Bugku CTF‑Crypto｜ok Ook!编码 Writeup</h1>
 
-<h2>题目信息</h2>
-<ul>
-<li>平台：Bugku CTF</li>
-<li>题型：Crypto密码学 Ook!语言</li>
-<li>题目名称：ok</li>
-<li>分值：10分</li>
-<li>作者：harry</li>
-</ul>
+    <a href="./index.html" class="back-btn">← 返回首页</a>
 
-<h2>题目分析</h2>
-<p>题目描述提示 <code>Ook.</code>，代表本题是Ook!编码。
-Ook! 属于Brainfuck衍生语言，全部指令只有 Ook. Ook? Ook!，两条指令组成一条操作，人工破译难度大，依靠在线解释器运行代码得到输出。</p>
+    <!-- 头部终端卡片 -->
+    <div class="terminal-header">
+        <div class="terminal-bar">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+        </div>
+        <div class="terminal-content">
+            <div class="category">BugkuCTF / Crypto / Writeup</div>
+            <h1>散乱的密文</h1>
+            <div class="subtitle">作者：陆楷中 | 解题日期：2026-09-24</div>
+        </div>
+    </div>
 
-<h2>解题步骤</h2>
-<ol>
-<li>点击页面下载按钮，下载题目附件，复制附件完整Ook代码。</li>
-<li>打开Ook在线解密工具，选择 Ook! to Text。</li>
-<li>粘贴全部Ook代码，执行运行。</li>
-<li>程序输出flag：
-<pre>flag{0a394df55312c51a}</pre>
-</li>
-<li>复制flag直接提交平台。</li>
-</ol>
+    <!-- 题目信息 -->
+    <div class="card">
+        <h2>题目信息</h2>
+        <ul>
+            <li><strong>平台：</strong>BugkuCTF</li>
+            <li><strong>类型：</strong>Crypto</li>
+            <li><strong>考点：</strong>字符变换、移位分析、多表替换或自定义编码还原</li>
+            <li><strong>Flag：</strong></li>
+        </ul>
 
-<h2>踩坑总结</h2>
-<ul>
-<li>复制代码不能丢 `. ? !` 标点符号，符号错误直接乱码。</li>
-<li>输出flag全部小写，不要改动字符。</li>
-<li>换行空格属于排版，无需手动删除。</li>
-</ul>
+        <div class="flag-box">
+            <span class="flag-label">FLAG</span>
+            <span class="flag-value">flag{这里填写你的真实flag}</span>
+        </div>
+    </div>
 
-<h2>考点总结</h2>
-<ul>
-<li>识别Ook!编码特征字符串</li>
-<li>Ook!与Brainfuck关系</li>
-<li>在线解释器工具使用</li>
-</ul>
+    <!-- 题目描述 -->
+    <div class="card">
+        <h2>题目描述</h2>
+        <p>题目给出一段看起来杂乱无章的密文，字符分布没有明显规律，需要先分析其编码特征、字符集和可能的变换方式，再逐步还原出明文格式。</p>
+    </div>
+
+    <!-- 解题思路 -->
+    <div class="card">
+        <h2>解题思路</h2>
+
+        <h3>步骤 1：观察密文特征</h3>
+        <p>首先统计密文字符集、字符频率、长度规律和分隔方式，判断是否为简单替换、移位、Base 类编码，或是某种自定义变换。</p>
+
+        <h3>步骤 2：尝试基础解密方法</h3>
+        <ul>
+            <li>若字符集中只有少量特殊符号，考虑键盘布局变换或象形替换。</li>
+            <li>若字符呈现明显分组，考虑按位置重组。</li>
+            <li>若存在字母和数字混合，考虑 ASCII、Hex、Base 系列或变形编码。</li>
+        </ul>
+
+        <h3>步骤 3：编写脚本还原</h3>
+        <p>确认变换规则后，编写脚本批量处理密文，输出候选明文，并从中提取 Flag 格式。</p>
+
+        <div class="tip">
+            <strong>提示：</strong>遇到“散乱密文”不要一上来做复杂密码分析，先检查是否存在字符替换、位置重排或简单移位。
+        </div>
+    </div>
+
+    <!-- 脚本实现 -->
+    <div class="card">
+        <h2>解密脚本</h2>
+        <pre><code># 以常见字符替换/移位还原为例
+ciphertext = "这里粘贴题目密文"
+plaintext = ""
+
+# 根据题目实际变换规则修改
+for ch in ciphertext:
+    if ch.isalpha():
+        # 示例：字母按一定偏移还原
+        plaintext += chr((ord(ch) - ord('a') - 3) % 26 + ord('a'))
+    else:
+        plaintext += ch
+
+print(plaintext)</code></pre>
+    </div>
+
+    <!-- 运行结果 -->
+    <div class="card">
+        <h2>运行结果</h2>
+        <pre><code>flag{这里填写你的真实flag}</code></pre>
+    </div>
+
+    <!-- 原理说明 -->
+    <div class="card">
+        <h2>原理说明</h2>
+        <ul>
+            <li>散乱密文的难点通常不在于高强度算法，而在于变换规则隐蔽。</li>
+            <li>先确定字符集和分组方式，再判断是替换、移位、重排还是组合变换。</li>
+            <li>脚本的目标是把“肉眼难以识别”的密文，转换为可读明文。</li>
+            <li>最终以 <code>flag{...}</code> 格式作为解密成功的标志。</li>
+        </ul>
+    </div>
+
+    <!-- 总结 -->
+    <div class="card">
+        <h2>总结</h2>
+        <p>这道题适合作为 Crypto 入门训练：先观察，再分类，最后用脚本批量还原。不要被“散乱”的表象迷惑，很多时候只要找到正确的字符映射或位置规律，就能快速得到 Flag。</p>
+    </div>
+
+    <footer>
+        © 2026 陆楷中 | CTF Writeup Archive
+    </footer>
+
 </body>
 </html>
