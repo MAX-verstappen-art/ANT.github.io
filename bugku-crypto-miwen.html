@@ -1,59 +1,407 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="utf-8">
-    <title>Bugku‑散乱的密文 WriteUp</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bugku Crypto - Ook! Writeup | 陆楷中</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #0f1115;
+            color: #e6edf3;
+            font-family: "JetBrains Mono", "Fira Code", Consolas, system-ui, -apple-system, sans-serif;
+            max-width: 960px;
+            margin: 48px auto;
+            padding: 0 20px;
+            line-height: 1.8;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            color: #79c0ff;
+            text-decoration: none;
+            background: #161b22;
+            border: 1px solid #30363d;
+            transition: all 0.15s ease-out;
+        }
+
+        .back-btn:hover {
+            border-color: #39d353;
+            color: #39d353;
+            transform: translateX(-4px);
+        }
+
+        .back-btn:active {
+            transform: scale(0.97);
+            background: #21262d;
+        }
+
+        /* 头部终端卡片 */
+        .terminal-header {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+            margin-bottom: 32px;
+        }
+
+        .terminal-bar {
+            background: #21262d;
+            padding: 10px 16px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .terminal-content {
+            padding: 28px;
+        }
+
+        .terminal-content .category {
+            font-size: 13px;
+            color: #8b949e;
+            margin-bottom: 8px;
+        }
+
+        .terminal-content h1 {
+            font-size: 28px;
+            color: #39d353;
+            margin-bottom: 10px;
+        }
+
+        .terminal-content .subtitle {
+            color: #79c0ff;
+            font-size: 14px;
+        }
+
+        /* 正文卡片 */
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+            transition: border-color 0.2s ease-out;
+        }
+
+        .card:hover {
+            border-color: #30363d;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #58a6ff;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #30363d;
+        }
+
+        h3 {
+            font-size: 16px;
+            color: #39d353;
+            margin: 18px 0 10px;
+        }
+
+        p {
+            margin-bottom: 12px;
+            color: #c9d1d9;
+        }
+
+        ul, ol {
+            padding-left: 22px;
+            margin-bottom: 12px;
+            color: #c9d1d9;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* 行内代码 */
+        code {
+            font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+            background: #21262d;
+            color: #ffa657;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 14px;
+            border: 1px solid #30363d;
+        }
+
+        /* 代码块 */
+        pre {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 18px 20px;
+            overflow-x: auto;
+            margin: 14px 0 18px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: #e6edf3;
+        }
+
+        /* Flag 高亮 */
+        .flag-box {
+            background: linear-gradient(135deg, #0d1117, #161b22);
+            border: 1px solid #39d353;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .flag-label {
+            color: #39d353;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .flag-value {
+            color: #ffa657;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            word-break: break-all;
+        }
+
+        /* 提示框 */
+        .tip {
+            background: #21262d;
+            border-left: 4px solid #f0c848;
+            padding: 14px 18px;
+            border-radius: 8px;
+            color: #e6edf3;
+            margin: 14px 0;
+        }
+
+        .tip strong {
+            color: #f0c848;
+        }
+
+        /* 底部署名 */
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #30363d;
+            text-align: center;
+            color: #8b949e;
+            font-size: 13px;
+        }
+
+        /* 点击反馈 */
+        button, a {
+            transition: transform 0.12s ease-out, background 0.15s ease-out, border-color 0.15s ease-out;
+        }
+
+        button:active, a:active {
+            transform: scale(0.97);
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #161b22;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #484f58;
+        }
+    </style>
 </head>
 <body>
-<h1>Bugku‑散乱的密文 Writeup</h1>
-<h2>题目信息</h2>
-<ul>
-    <li>题目名称：散乱的密文</li>
-    <li>题目类型：Crypto</li>
-    <li>题目描述：一段被打乱顺序的密文，找出原始flag</li>
-</ul>
 
-<h2>解题思路</h2>
-<p>题目给出分组置换规则：**6位分组置换**，含义为每6个字符作为一组，按照顺序 <code>2 1 6 5 3 4</code> 进行位置打乱。</p>
-<p>加密下标（从0开始）加密顺序：<code>[1, 0, 5, 4, 2, 3]</code></p>
-<p>加密时每组原位置：0→1，1→0，2→5，3→4，4→2，5→3</p>
-<p>想要解密，需要推导逆置换，将每组字符还原顺序，最后剔除干扰字符，得到flag。</p>
+    <a href="./index.html" class="back-btn">← 返回首页</a>
 
-<h2>密文</h2>
-<pre>cipher = "If5{ag024c483549d7fd@1}"</pre>
+    <!-- 头部终端卡片 -->
+    <div class="terminal-header">
+        <div class="terminal-bar">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+        </div>
+        <div class="terminal-content">
+            <div class="category">BugkuCTF / Crypto / Writeup</div>
+            <h1>Ook! Brainfuck 解密</h1>
+            <div class="subtitle">作者：陆楷中 | 解题日期：2026-09-24</div>
+        </div>
+    </div>
 
-<h2>Python解密EXP</h2>
-<pre>
-cipher = "If5{ag024c483549d7fd@1}"
-# 加密顺序 [1,0,5,4,2,3]，求逆置换
-encrypt_order = [1, 0, 5, 4, 2, 3]
-# 构造解密逆映射
-decrypt_order = [0]*6
-for plain_idx,cipher_idx in enumerate(encrypt_order):
-    decrypt_order[cipher_idx] = plain_idx
+    <!-- 题目信息 -->
+    <div class="card">
+        <h2>题目信息</h2>
+        <ul>
+            <li><strong>平台：</strong>BugkuCTF</li>
+            <li><strong>类型：</strong>Crypto</li>
+            <li><strong>考点：</strong>Ook! → Brainfuck 转换与执行</li>
+            <li><strong>Flag：</strong></li>
+        </ul>
 
-res = ""
-# 按6字符分组
-for i in range(0, len(cipher), 6):
-    block = cipher[i:i+6]
-    if len(block) == 6:
-        new_block = ''.join([block[x] for x in decrypt_order])
-        res += new_block
-    else:
-        res += block
+        <div class="flag-box">
+            <span class="flag-label">FLAG</span>
+            <span class="flag-value">flag{bugku_jiami}</span>
+        </div>
+    </div>
 
-print(res)
-</pre>
+    <!-- 解题思路 -->
+    <div class="card">
+        <h2>解题思路</h2>
+        <p>Ook! 是一种基于 Brainfuck 的趣味晦涩语言，它使用 <code>Ook.</code>、<code>Ook?</code>、<code>Ook!</code> 的组合来表示 Brainfuck 的 8 种指令。因此解题的核心不是直接分析字符，而是先将 Ook! 转换为标准 Brainfuck，再解释执行得到明文。</p>
 
-<h2>脚本运行结果</h2>
-<pre>flag{024ac4835497dfd1}</pre>
+        <div class="tip">
+            <strong>关键思路：</strong>Ook! 只是 Brainfuck 的“外壳”，必须先转成 Brainfuck，再运行解密。
+        </div>
 
-<h2>原理说明</h2>
-<p>1.加密：明文块 [p0,p1,p2,p3,p4,p5] → 根据 encrypt_order[1,0,5,4,2,3]，输出 [p1,p0,p5,p4,p2,p3]（密文块）</p>
-<p>2.解密：拿到密文块，使用逆置换 decrypt_order，把密文每个位置放回原始明文位置。</p>
-<p>3.分组结束后剩余不足6位的字符直接拼接，最后得到完整flag。</p>
+        <h3>步骤 1：识别 Ook! 密文</h3>
+        <p>题目给出的密文由大量 <code>Ook.</code>、<code>Ook?</code>、<code>Ook!</code> 组成，需要按每两个一组进行解析。</p>
 
-<br>
-<a href="./index.html">← 返回博客主页</a>
+        <h3>步骤 2：Ook! 转 Brainfuck</h3>
+        <p>Ook! 指令与 Brainfuck 指令存在固定映射关系：</p>
+        <pre><code>Ook. Ook.  →  >
+Ook. Ook?  →  <
+Ook? Ook.  →  +
+Ook? Ook?  →  -
+Ook! Ook.  →  .
+Ook. Ook!  →  ,
+Ook! Ook?  →  [
+Ook? Ook!  →  ]</code></pre>
+
+        <h3>步骤 3：执行 Brainfuck</h3>
+        <p>将转换后的 Brainfuck 代码输入解释器运行，最终输出明文 Flag。</p>
+    </div>
+
+    <!-- 脚本实现 -->
+    <div class="card">
+        <h2>Python 解密脚本</h2>
+        <pre><code>def ook_to_brainfuck(ook):
+    tokens = ook.split()
+    code = []
+    mapping = {
+        ('Ook.', 'Ook.'): '>',
+        ('Ook.', 'Ook?'): '<',
+        ('Ook?', 'Ook.'): '+',
+        ('Ook?', 'Ook?'): '-',
+        ('Ook!', 'Ook.'): '.',
+        ('Ook.', 'Ook!'): ',',
+        ('Ook!', 'Ook?'): '[',
+        ('Ook?', 'Ook!'): ']',
+    }
+    for i in range(0, len(tokens), 2):
+        code.append(mapping[(tokens[i], tokens[i+1])])
+    return ''.join(code)
+
+
+def run_brainfuck(code):
+    tape = [0] * 30000
+    ptr = 0
+    pc = 0
+    output = []
+    stack = []
+    bracket_map = {}
+
+    for i, c in enumerate(code):
+        if c == '[':
+            stack.append(i)
+        elif c == ']':
+            start = stack.pop()
+            bracket_map[start] = i
+            bracket_map[i] = start
+
+    while pc < len(code):
+        c = code[pc]
+        if c == '>':
+            ptr += 1
+        elif c == '<':
+            ptr -= 1
+        elif c == '+':
+            tape[ptr] = (tape[ptr] + 1) % 256
+        elif c == '-':
+            tape[ptr] = (tape[ptr] - 1) % 256
+        elif c == '.':
+            output.append(chr(tape[ptr]))
+        elif c == ',':
+            tape[ptr] = ord(input()[0])
+        elif c == '[' and tape[ptr] == 0:
+            pc = bracket_map[pc]
+        elif c == ']' and tape[ptr] != 0:
+            pc = bracket_map[pc]
+        pc += 1
+
+    return ''.join(output)
+
+
+ook_code = """Ook! Ook. Ook? Ook. Ook! Ook! ..."""
+bf_code = ook_to_brainfuck(ook_code)
+flag = run_brainfuck(bf_code)
+print(flag)</code></pre>
+    </div>
+
+    <!-- 运行结果 -->
+    <div class="card">
+        <h2>运行结果</h2>
+        <pre><code>flag{bugku_jiami}</code></pre>
+    </div>
+
+    <!-- 原理说明 -->
+    <div class="card">
+        <h2>原理说明</h2>
+        <ul>
+            <li>Ook! 以两个符号为一组，每组对应一个 Brainfuck 指令。</li>
+            <li>Brainfuck 基于纸带模型，通过指针移动和字节增减实现计算。</li>
+            <li>遇到循环指令 <code>[</code> 和 <code>]</code> 时，需要预先建立括号映射，才能正确跳转。</li>
+            <li>最终输出是 ASCII 字符流，拼接后得到明文 Flag。</li>
+        </ul>
+    </div>
+
+    <!-- 总结 -->
+    <div class="card">
+        <h2>总结</h2>
+        <p>这道题的关键是识别 Ook! 与 Brainfuck 的等价关系，并利用脚本完成自动转换与执行。遇到类似趣味加密语言时，不要直接做字符频率分析，而应先判断它属于哪种晦涩语言，再按对应解释模型处理。</p>
+    </div>
+
+    <footer>
+        © 2026 陆楷中 | CTF Writeup Archive
+    </footer>
+
 </body>
 </html>
