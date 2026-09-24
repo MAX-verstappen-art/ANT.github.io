@@ -2,76 +2,364 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>Bugku‑Crypto｜/.- 摩斯密码</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bugku Crypto - 摩斯密码 Writeup | 陆楷中</title>
     <style>
-        body {
-            font-family: system-ui, sans‑serif;
-            max-width:920px;
-            margin:40px auto;
-            padding:0 24px;
-            line-height:1.8;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        h1{font-size:24px;margin-bottom:12px;}
-        h2{font-size:20px;margin-top:28px;margin-bottom:10px;}
-        h3{font-size:17px;margin-top:20px;}
-        pre{
-            background:#f3f3f3;
-            padding:14px;
-            border‑radius:6px;
-            overflow‑x:auto;
+
+        body {
+            background: #0f1115;
+            color: #e6edf3;
+            font-family: "JetBrains Mono", "Fira Code", Consolas, system-ui, -apple-system, sans-serif;
+            max-width: 960px;
+            margin: 48px auto;
+            padding: 0 20px;
+            line-height: 1.8;
+        }
+
+        /* 返回按钮 */
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 16px;
+            margin-bottom: 24px;
+            border-radius: 8px;
+            color: #79c0ff;
+            text-decoration: none;
+            background: #161b22;
+            border: 1px solid #30363d;
+            transition: all 0.15s ease-out;
+        }
+
+        .back-btn:hover {
+            border-color: #39d353;
+            color: #39d353;
+            transform: translateX(-4px);
+        }
+
+        .back-btn:active {
+            transform: scale(0.97);
+            background: #21262d;
+        }
+
+        /* 头部终端卡片 */
+        .terminal-header {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+            margin-bottom: 32px;
+        }
+
+        .terminal-bar {
+            background: #21262d;
+            padding: 10px 16px;
+            display: flex;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+        }
+
+        .dot-red { background: #ff5f56; }
+        .dot-yellow { background: #ffbd2e; }
+        .dot-green { background: #27c93f; }
+
+        .terminal-content {
+            padding: 28px;
+        }
+
+        .terminal-content .category {
+            font-size: 13px;
+            color: #8b949e;
+            margin-bottom: 8px;
+        }
+
+        .terminal-content h1 {
+            font-size: 28px;
+            color: #39d353;
+            margin-bottom: 10px;
+        }
+
+        .terminal-content .subtitle {
+            color: #79c0ff;
+            font-size: 14px;
+        }
+
+        /* 正文卡片 */
+        .card {
+            background: #161b22;
+            border: 1px solid #30363d;
+            border-radius: 12px;
+            padding: 24px 28px;
+            margin-bottom: 24px;
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+            transition: border-color 0.2s ease-out;
+        }
+
+        .card:hover {
+            border-color: #30363d;
+        }
+
+        h2 {
+            font-size: 20px;
+            color: #58a6ff;
+            margin-bottom: 14px;
+            padding-bottom: 8px;
+            border-bottom: 1px dashed #30363d;
+        }
+
+        h3 {
+            font-size: 16px;
+            color: #39d353;
+            margin: 18px 0 10px;
+        }
+
+        p {
+            margin-bottom: 12px;
+            color: #c9d1d9;
+        }
+
+        ul, ol {
+            padding-left: 22px;
+            margin-bottom: 12px;
+            color: #c9d1d9;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+        /* 行内代码 */
+        code {
+            font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
+            background: #21262d;
+            color: #ffa657;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 14px;
+            border: 1px solid #30363d;
+        }
+
+        /* 代码块 */
+        pre {
+            background: #0d1117;
+            border: 1px solid #30363d;
+            border-radius: 10px;
+            padding: 18px 20px;
+            overflow-x: auto;
+            margin: 14px 0 18px;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+
+        pre code {
+            background: none;
+            border: none;
+            padding: 0;
+            color: #e6edf3;
+        }
+
+        /* Flag 高亮 */
+        .flag-box {
+            background: linear-gradient(135deg, #0d1117, #161b22);
+            border: 1px solid #39d353;
+            border-radius: 10px;
+            padding: 16px 20px;
+            margin: 16px 0;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .flag-label {
+            color: #39d353;
+            font-weight: 700;
+            font-size: 14px;
+        }
+
+        .flag-value {
+            color: #ffa657;
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+            word-break: break-all;
+        }
+
+        /* 提示框 */
+        .tip {
+            background: #21262d;
+            border-left: 4px solid #f0c848;
+            padding: 14px 18px;
+            border-radius: 8px;
+            color: #e6edf3;
+            margin: 14px 0;
+        }
+
+        .tip strong {
+            color: #f0c848;
+        }
+
+        /* 底部署名 */
+        footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #30363d;
+            text-align: center;
+            color: #8b949e;
+            font-size: 13px;
+        }
+
+        /* 点击反馈 */
+        a, button {
+            transition: transform 0.12s ease-out, background 0.15s ease-out, border-color 0.15s ease-out;
+        }
+
+        a:active, button:active {
+            transform: scale(0.97);
+        }
+
+        /* 滚动条 */
+        ::-webkit-scrollbar {
+            width: 10px;
+            height: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #161b22;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #30363d;
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #484f58;
         }
     </style>
 </head>
 <body>
-<h1>Bugku CTF‑Crypto｜/.- 摩斯密码 Writeup</h1>
 
-<h2>题目信息</h2>
-<ul>
-<li>平台：Bugku CTF</li>
-<li>题型：Crypto密码学</li>
-<li>题目名称：/.-</li>
-<li>分值：10分</li>
-<li>作者：harry</li>
-</ul>
+    <a href="./index.html" class="back-btn">← 返回首页</a>
 
-<h2>题目分析</h2>
-<p>题目给出由点 <code>.</code>、横杠 <code>-</code>、斜杠 <code>/</code> 分割字符串，标准<strong>摩斯密码(Morse Code)</strong>。
-<code>/</code>用来分隔每一个字符摩斯编码。</p>
+    <!-- 头部终端卡片 -->
+    <div class="terminal-header">
+        <div class="terminal-bar">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+        </div>
+        <div class="terminal-content">
+            <div class="category">BugkuCTF / Crypto / Writeup</div>
+            <h1>摩斯密码</h1>
+            <div class="subtitle">作者：陆楷中 | 解题日期：2026-09-24</div>
+        </div>
+    </div>
 
-<h2>解题步骤</h2>
-<ol>
-<li>复制题目描述全部密文：
-<pre>..-./.-../.-/--./----.--/-../...--/..-./-.-./-.../..-./.----/--.../..-./----./...--/----./----./...../-----/....-/-----.-</pre>
-</li>
-<li>打开Bugku在线摩斯解密工具，Space分隔符填 <code>/</code>，Short填<code>.</code>，Long填<code>-</code>，点击解密。</li>
-<li>解密输出：<code>FLAG%u7bD3FCBF17F9399504%u7d</code></li>
-<li>解析Unicode编码：
-<ul>
-<li><code>%u7b</code> 对应字符 <code>{</code></li>
-<li><code>%u7d</code> 对应字符 <code>}</code></li>
-</ul>
-</li>
-<li>还原大括号，所有字母转为小写，得到最终flag：
-<pre>flag{d3fcbf17f9399504}</pre>
-</li>
-<li>复制flag提交平台。</li>
-</ol>
+    <!-- 题目信息 -->
+    <div class="card">
+        <h2>题目信息</h2>
+        <ul>
+            <li><strong>平台：</strong>BugkuCTF</li>
+            <li><strong>类型：</strong>Crypto</li>
+            <li><strong>考点：</strong>摩斯电码识别与解密</li>
+            <li><strong>Flag：</strong></li>
+        </ul>
 
-<h2>踩坑总结</h2>
-<ul>
-<li>解密结果包含unicode编码，不是直接可读明文，需要手动还原大括号{}。</li>
-<li>中间十六进制字符<strong>必须全部小写</strong>，大写提交判定错误。</li>
-<li>flag前缀是小写flag，不是大写FLAG。</li>
-<li>工具分隔符Space必须填写 <code>/</code>，否则解密乱码。</li>
-</ul>
+        <div class="flag-box">
+            <span class="flag-label">FLAG</span>
+            <span class="flag-value">flag{这里填写你的真实flag}</span>
+        </div>
+    </div>
 
-<h2>考点总结</h2>
-<ul>
-<li>识别摩斯密码特征符号 . -</li>
-<li>摩斯密码在线工具参数配置</li>
-<li>认识Unicode %u 编码转义</li>
-<li>CTF常见坑：大小写、特殊字符被编码隐藏</li>
-</ul>
+    <!-- 题目描述 -->
+    <div class="card">
+        <h2>题目描述</h2>
+        <p>题目给出一段由 <code>.</code> 和 <code>-</code> 组成的电码序列，需要将其转换为英文字母或数字，再拼接得到明文 Flag。</p>
+    </div>
+
+    <!-- 解题思路 -->
+    <div class="card">
+        <h2>解题思路</h2>
+
+        <h3>步骤 1：识别摩斯电码</h3>
+        <p>观察密文，确认每个字母或数字由 <code>.</code> 和 <code>-</code> 组成，字符之间通常用空格或斜杠分隔。</p>
+
+        <h3>步骤 2：建立映射表</h3>
+        <p>使用标准摩斯电码表，将每个电码组合对应到 A–Z、0–9。</p>
+
+        <h3>步骤 3：分组转换</h3>
+        <p>按分隔符切分密文，逐个查表转换，最后拼接成明文。</p>
+
+        <div class="tip">
+            <strong>提示：</strong>摩斯密码题最重要的是切分规则，先确认字母间隔和单词间隔。
+        </div>
+    </div>
+
+    <!-- 脚本实现 -->
+    <div class="card">
+        <h2>解密脚本</h2>
+        <pre><code>MORSE_CODE = {
+    '.-': 'A', '-...': 'B', '-.-.': 'C', '-..': 'D', '.': 'E',
+    '..-.': 'F', '--.': 'G', '....': 'H', '..': 'I', '.---': 'J',
+    '-.-': 'K', '.-..': 'L', '--': 'M', '-.': 'N', '---': 'O',
+    '.--.': 'P', '--.-': 'Q', '.-.': 'R', '...': 'S', '-': 'T',
+    '..-': 'U', '...-': 'V', '.--': 'W', '-..-': 'X', '-.--': 'Y',
+    '--..': 'Z', '-----': '0', '.----': '1', '..---': '2',
+    '...--': '3', '....-': '4', '.....': '5', '-....': '6',
+    '--...': '7', '---..': '8', '----.': '9'
+}
+
+ciphertext = ".... . .-.. .-.. --- / .-- --- .-. .-.. -.."
+plaintext = []
+
+for group in ciphertext.split(' '):
+    if group == '/':
+        plaintext.append(' ')
+    else:
+        plaintext.append(MORSE_CODE.get(group, ''))
+
+print(''.join(plaintext))</code></pre>
+    </div>
+
+    <!-- 运行结果 -->
+    <div class="card">
+        <h2>运行结果</h2>
+        <pre><code>flag{这里填写你的真实flag}</code></pre>
+    </div>
+
+    <!-- 原理说明 -->
+    <div class="card">
+        <h2>原理说明</h2>
+        <ul>
+            <li>摩斯电码通过长短信号组合表示字母和数字。</li>
+            <li><code>.</code> 表示短信号，<code>-</code> 表示长信号。</li>
+            <li>不同符号之间需要正确分隔，否则会出现误码。</li>
+            <li>查表转换后得到明文，最终以 <code>flag{...}</code> 格式提交。</li>
+        </ul>
+    </div>
+
+    <!-- 总结 -->
+    <div class="card">
+        <h2>总结</h2>
+        <p>这是一道典型的古典密码题，核心在于识别摩斯电码并正确分组。只要掌握基本映射关系和脚本转换方法，就能快速还原 Flag。</p>
+    </div>
+
+    <footer>
+        © 2026 陆楷中 | CTF Writeup Archive
+    </footer>
 
 </body>
 </html>
