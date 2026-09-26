@@ -14,253 +14,152 @@
         body {
             min-height: 100vh;
             background:
-                radial-gradient(circle at 20% 10%, rgba(56,189,248,0.08), transparent 45%),
-                radial-gradient(circle at 80% 85%, rgba(16,185,129,0.06), transparent 45%),
+                radial-gradient(circle at 20% 10%, rgba(56, 189, 248, 0.10), transparent 45%),
+                radial-gradient(circle at 80% 90%, rgba(16, 185, 129, 0.07), transparent 45%),
                 #07090d;
-            color: #d1dbe8;
-            font-family: "JetBrains Mono", "Fira Code", Consolas, monospace;
-            padding: 42px 18px 60px;
+            color: #d6deeb;
+            font-family: "JetBrains Mono", "Fira Code", Consolas, "Microsoft YaHei", monospace;
+            padding: 40px 20px 60px;
             display: flex;
             justify-content: center;
         }
 
         .glass-shell {
             width: 100%;
-            max-width: 1020px;
-            border-radius: 20px;
-            border: 1px solid rgba(148,163,184,0.18);
-            background: linear-gradient(145deg, rgba(22,30,44,0.75), rgba(12,18,28,0.85));
-            box-shadow: 0 25px 70px rgba(0,0,0,0.55);
+            max-width: 860px;
+            border-radius: 18px;
+            border: 1px solid rgba(148, 163, 184, 0.20);
+            background: linear-gradient(145deg, rgba(22, 30, 44, 0.78), rgba(12, 18, 30, 0.90));
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
             overflow: hidden;
-            backdrop-filter: blur(12px);
         }
 
         .window-bar {
-            padding:14px 20px;
-            border-bottom:1px solid rgba(148,163,184,0.12);
-            display:flex;
-            align-items:center;
-            gap:10px;
+            padding: 14px 20px;
+            border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
+
         .dot {
-            width:12px;
-            height:12px;
-            border-radius:50%;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
         }
-        .dot-red{background:#ff5f57;}
-        .dot-yellow{background:#ffbd2e;}
-        .dot-green{background:#28ca42;}
-        .window-title{
-            margin-left:8px;
-            font-size:13px;
-            color:#8899b3;
+        .dot-red { background: linear-gradient(145deg, #ff6058, #d9443c); }
+        .dot-yellow { background: linear-gradient(145deg, #ffd166, #e0b143); }
+        .dot-green { background: linear-gradient(145deg, #69db7c, #3fa358); }
+
+        .window-title {
+            margin-left: 8px;
+            font-size: 13px;
+            color: #94a3b8;
         }
 
-        .glass-inner{
-            padding:38px;
+        .glass-inner {
+            padding: 34px 36px;
         }
 
-        .author-name{
-            font-size:24px;
-            color:#7dd3fc;
-            font-weight:bold;
-            margin-bottom:6px;
-        }
-        .desc-text{
-            font-size:14px;
-            color:#8899b3;
-            margin-bottom:32px;
-        }
-        .desc-text span{
-            color:#4ade80;
+        .author {
+            font-size: 22px;
+            font-weight: 700;
+            color: #7dd3fc;
+            margin-bottom: 6px;
         }
 
-        .link-grid{
-            display:grid;
-            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
-            gap:14px;
+        .subtitle {
+            font-size: 14px;
+            color: #8aa0b7;
+            margin-bottom: 28px;
+        }
+        .subtitle span { color: #4ade80; }
+
+        ul {
+            list-style: none;
         }
 
-        .item a{
-            display:block;
-            padding:16px 18px;
-            border-radius:12px;
-            border:1px solid rgba(148,163,184,0.16);
-            background:rgba(30,41,59,0.45);
-            text-decoration:none;
-            color:#cbd5e1;
-            transition: 0.22s ease;
-            position:relative;
-            overflow:hidden;
-        }
-        .item a::before{
-            content:"";
-            position:absolute;
-            left:0;
-            top:0;
-            width:3px;
-            height:100%;
-            background:linear-gradient(180deg,#38bdf8,#10b981);
-            opacity:0;
-            transition:0.22s;
+        li {
+            margin: 10px 0;
         }
 
-        .tag{
-            display:inline-block;
-            font-size:11px;
-            padding:2px 7px;
-            border-radius:4px;
-            margin-right:8px;
-        }
-        .tag-web{color:#38bdf8;border:1px solid rgba(56,189,248,0.3);}
-        .tag-crypto{color:#a78bfa;border:1px solid rgba(167,139,250,0.3);}
-        .tag-misc{color:#fbbf24;border:1px solid rgba(251,191,36,0.3);}
-        .tag-rev{color:#fb7185;border:1px solid rgba(251,113,133,0.3);}
-        .tag-pwn{color:#34d399;border:1px solid rgba(52,211,153,0.3);}
-        .tag-new{color:#22d3ee;border:1px solid rgba(34,211,238,0.4);}
-
-        .item a:hover{
-            transform: translateY(-3px);
-            border-color:rgba(125,211,252,0.45);
-            background:rgba(56,189,248,0.11);
-            box-shadow:0 14px 32px rgba(0,0,0,0.4), 0 0 0 1px rgba(56,189,248,0.25);
-            color:#e0f2fe;
-        }
-        .item a:hover::before{
-            opacity:1;
-        }
-        .item a:active{
-            transform: scale(0.975) translateY(-1px);
-            box-shadow:0 6px 14px rgba(0,0,0,0.45);
+        a {
+            display: block;
+            padding: 12px 16px;
+            font-size: 14px;
+            color: #cfd8e3;
+            text-decoration: none;
+            border-radius: 10px;
+            border: 1px solid rgba(148, 163, 184, 0.18);
+            background: rgba(30, 41, 59, 0.45);
+            transition: all 0.18s ease;
         }
 
-        .footer-area{
-            margin-top:40px;
-            padding-top:20px;
-            border-top:1px dashed rgba(148,163,184,0.18);
-            display:flex;
-            justify-content:space-between;
-            flex-wrap:wrap;
-            gap:8px;
-            font-size:13px;
-            color:#70829c;
+        a:hover {
+            border-color: rgba(125, 211, 252, 0.5);
+            background: rgba(56, 189, 248, 0.12);
+            color: #e0f2fe;
+            transform: translateX(4px);
         }
 
-        @media(max-width:860px){
-            .link-grid{
-                grid-template-columns:1fr;
-            }
-            .glass-inner{
-                padding:24px;
-            }
+        a:active {
+            transform: scale(0.98);
         }
+
+        footer {
+            margin-top: 36px;
+            padding-top: 18px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.18);
+            font-size: 13px;
+            color: #7990a8;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        footer .tag { color: #4ade80; }
     </style>
 </head>
 <body>
-<div class="glass-shell">
-    <div class="window-bar">
-        <div class="dot dot-red"></div>
-        <div class="dot dot-yellow"></div>
-        <div class="dot dot-green"></div>
-        <div class="window-title">index.html — CTF Writeup Archive</div>
-    </div>
-    <div class="glass-inner">
-        <div class="author-name">陆楷中</div>
-        <div class="desc-text">// CTF Writeup Archive | <span>Bugku Solution Collection</span></div>
-
-        <div class="link-grid">
-            <div class="item">
-                <a href="./1.html">
-                    <span class="tag tag-new">NEW</span>第一个测试帖子
-                </a>
-            </div>
-            <div class="item">
-                <a href="./calc.html">
-                    <span class="tag tag-web">Web</span>Bugku 计算器
-                </a>
-            </div>
-            <div class="item">
-                <a href="./alert.html">
-                    <span class="tag tag-web">Web</span>Bugku alert
-                </a>
-            </div>
-            <div class="item">
-                <a href="./phpget.html">
-                    <span class="tag tag-web">Web</span>Bugku PHP GET传参
-                </a>
-            </div>
-            <div class="item">
-                <a href="./first-class.html">
-                    <span class="tag tag-web">Web</span>Bugku 头等舱
-                </a>
-            </div>
-            <div class="item">
-                <a href="./bugku-web-ni-bi-xu-rang-ta-ting-xia.html">
-                    <span class="tag tag-web">Web</span>Bugku‑Web 你必须让他停下
-                </a>
-            </div>
-            <div class="item">
-                <a href="./bugku-source.html">
-                    <span class="tag tag-web">Web</span>Bugku‑source
-                </a>
-            </div>
-            <div class="item">
-                <a href="./bugku-misc-simple-image.html">
-                    <span class="tag tag-misc">Misc</span>Bugku‑Misc 单纯的图片
-                </a>
-            </div>
-            <div class="item">
-                <a href="./bugku-crypto-smart-sheep.html">
-                    <span class="tag tag-crypto">Crypto</span>Bugku‑Crypto 聪明的小羊
-                </a>
-            </div>
-            <div class="item">
-                <a href="./bugku-reverse-basic.html">
-                    <span class="tag tag-rev">Reverse</span>Bugku‑Reverse 入门逆向
-                </a>
-            </div>
-            <div class="item">
-                <a href="./bugku-pwn-swiss-army.html">
-                    <span class="tag tag-pwn">PWN</span>Bugku‑PWN 瑞士军刀
-                </a>
-            </div>
-            <div class="item">
-                <a href="./bugku-crypto-morse.html">
-                    <span class="tag tag-crypto">Crypto</span>Bugku‑Crypto 摩斯密码
-                </a>
-            </div>
-            <div class="item">
-                <a href="./bugku-crypto-ook.html">
-                    <span class="tag tag-crypto">Crypto</span>Bugku‑Crypto Ook!编码
-                </a>
-            </div>
-            <div class="item">
-                <a href="./bugku-crypto-brainfuck.html">
-                    <span class="tag tag-crypto">Crypto</span>Bugku‑Crypto Brainfuck
-                </a>
-            </div>
-            <div class="item">
-                <a href="./bugku-misc-fqmqz.html">
-                    <span class="tag tag-misc">Misc</span>Bugku‑Misc 富强民主
-                </a>
-            </div>
-            <div class="item">
-                <a href="./bugku-crypto-miwen.html">
-                    <span class="tag tag-crypto">Crypto</span>Bugku‑Crypto 散乱的密文
-                </a>
-            </div>
-            <div class="item">
-                <a href="./bugku-crypto-not-md5.html">
-                    <span class="tag tag-crypto">Crypto</span>Bugku‑Crypto 这不是md5
-                </a>
-            </div>
+    <div class="glass-shell">
+        <div class="window-bar">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+            <div class="window-title">index.html — CTF Writeup Archive</div>
         </div>
 
-        <div class="footer-area">
-            <span>© 2026 陆楷中</span>
-            <span>GitHub Pages | CTF Writeup</span>
+        <div class="glass-inner">
+            <div class="author">陆楷中</div>
+            <div class="subtitle">// CTF Writeup Archive | <span>Bugku Solution Collection</span></div>
+
+            <ul>
+                <li><a href="./1.html">点击查看我的第一个帖子</a></li>
+                <li><a href="./calc.html">Bugku 计算器 Writeup</a></li>
+                <li><a href="./alert.html">Bugku alert Writeup</a></li>
+                <li><a href="./phpget.html">Bugku PHP GET传参 Writeup</a></li>
+                <li><a href="./first-class.html">Bugku 头等舱 Writeup</a></li>
+                <li><a href="./bugku-web-ni-bi-xu-rang-ta-ting-xia.html">Bugku Web - 你必须让他停下</a></li>
+                <li><a href="./bugku-source.html">Bugku-source</a></li>
+                <li><a href="./bugku-misc-simple-image.html">Bugku MISC - 单纯的图片</a></li>
+                <li><a href="./bugku-crypto-smart-sheep.html">Bugku Crypto - 聪明的小羊</a></li>
+                <li><a href="./bugku-reverse-basic.html">Bugku Reverse - 入门逆向</a></li>
+                <li><a href="./bugku-pwn-swiss-army.html">Bugku PWN - 瑞士军刀 Writeup</a></li>
+                <li><a href="./bugku-crypto-morse.html">Bugku Crypto - 摩斯密码</a></li>
+                <li><a href="./bugku-crypto-ook.html">2026-09-24 Bugku Crypto - Ook(Ook!编码)</a></li>
+                <li><a href="./bugku-crypto-brainfuck.html">Bugku Crypto - [+-] Brainfuck</a></li>
+                <li><a href="./bugku-misc-fqmqz.html">Bugku-Misc | 富强民主</a></li>
+                <li><a href="./bugku-crypto-miwen.html">2026-09-24 Bugku Crypto - 散乱的密文</a></li>
+                <li><a href="./bugku-crypto-not-md5.html">2026-09-24 Bugku Crypto - 这不是md5</a></li>
+            </ul>
+
+            <footer>
+                <span>© 2026 陆楷中</span>
+                <span class="tag">GitHub Pages</span>
+            </footer>
         </div>
     </div>
-</div>
 </body>
 </html>
