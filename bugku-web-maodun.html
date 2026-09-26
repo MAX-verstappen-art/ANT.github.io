@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh‑CN">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bugku Web｜矛盾 Writeup</title>
+    <title>Bugku - 矛盾 Writeup</title>
     <style>
         * {
             margin: 0;
@@ -11,191 +11,92 @@
             box-sizing: border-box;
         }
         body {
-            min-height: 100vh;
-            background:
-                radial-gradient(circle at 20% 10%, rgba(56,189,248,0.08), transparent 45%),
-                radial-gradient(circle at 80% 85%, rgba(16,185,129,0.06), transparent 45%),
-                #07090d;
-            color: #cbd5e1;
-            font-family: "JetBrains Mono", Fira Code, Consolas, monospace;
-            padding:40px 20px 60px;
-            display:flex;
-            justify-content:center;
+            background-color: #12141c;
+            color: #e2e8f0;
+            font-family: "Consolas", "Microsoft Yahei", monospace;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 20px;
         }
-        .glass-shell {
-            width:100%;
-            max-width:920px;
-            border-radius: 18px;
-            border: 1px solid rgba(148,163,184,0.18);
-            background: linear-gradient(145deg, rgba(22,30,44,0.75), rgba(12,18,30,0.85));
-            box-shadow:0 22px 60px rgba(0,0,0,0.45);
-            overflow:hidden;
+        h1 {
+            color: #61dafb;
+            margin-bottom: 8px;
+            font-size: 28px;
         }
-        .window-bar {
-            padding:14px 20px;
-            border-bottom:1px solid rgba(148,163,184,0.14);
-            display:flex;
-            align-items:center;
-            gap:10px;
+        .author {
+            color:#94a3b8;
+            margin-bottom:32px;
         }
-        .dot {
-            width:12px;
-            height:12px;
-            border-radius:50%;
+        h2 {
+            color:#82caff;
+            margin:28px 0 12px;
+            font-size:20px;
+            border-left:4px solid #3b82f6;
+            padding-left:12px;
         }
-        .dot-red{background:#ff5f57;}
-        .dot-yellow{background:#ffbd2e;}
-        .dot-green{background:#28c840;}
-        .win-title{font-size:13px;color:#94a3b8;margin-left:8px;}
-        .content {
-            padding:36px;
+        p {
+            margin-bottom:14px;
         }
-        h1{
-            color:#7dd3fc;
-            font-size:24px;
-            margin-bottom:20px;
+        pre {
+            background:#1e2230;
+            padding:16px;
+            border-radius:8px;
+            overflow-x:auto;
+            border:1px solid #2d3446;
+            margin:16px 0;
         }
-        h2{
-            color:#a5f3fc;
-            font-size:18px;
-            margin:28px 0 10px;
+        code {
+            color:#79e2a3;
+            font-family:Consolas,monospace;
         }
-        .info-card{
-            background:rgba(15,23,42,0.55);
-            border:1px solid rgba(148,163,184,0.14);
-            border-radius:10px;
-            padding:16px 20px;
-        }
-        ul.info-list{
-            padding-left:22px;
-            line-height:1.75;
-        }
-        ol.steps{
-            padding-left:24px;
-            line-height:1.8;
-        }
-        p{
-            line-height:1.7;
-        }
-        code{
-            color:#fcd34d;
-            font-family:monospace;
-        }
-        pre{
-            background:#0f172a;
+        .flag-box {
+            background:#162b3c;
             padding:14px;
             border-radius:8px;
-            margin:10px 0;
-            overflow-x:auto;
-        }
-        .flag-block{
-            margin-top:14px;
-            background:rgba(30,41,59,0.6);
-            border-left:4px solid #4ade80;
-            padding:14px 18px;
-            border-radius:8px;
-        }
-        .flag-text{
-            color:#86efac;
-            font-family:monospace;
-        }
-        .back-btn {
-            display:inline-block;
-            margin-top:36px;
-            padding:9px 20px;
-            border-radius:10px;
-            border:1px solid rgba(125,211,252,0.35);
-            color:#7dd3fc;
-            text-decoration:none;
-            background:rgba(30,41,59,0.4);
-            transition:0.2s ease;
-        }
-        .back-btn:hover{
-            background:rgba(56,189,248,0.16);
-        }
-        .back-btn:active{
-            transform:scale(0.97);
-        }
-        footer{
-            margin-top:40px;
-            padding-top:16px;
-            border-top:1px dashed rgba(148,163,184,0.16);
-            display:flex;
-            justify-content:space-between;
-            font-size:13px;
-            color:#64748b;
+            border:1px solid #2374ab;
+            margin:20px 0;
         }
     </style>
 </head>
 <body>
-<div class="glass-shell">
-    <div class="window-bar">
-        <div class="dot dot-red"></div>
-        <div class="dot dot-yellow"></div>
-        <div class="dot dot-green"></div>
-        <div class="win-title">bugku-web-maodun.html — Writeup</div>
-    </div>
-    <div class="content">
-        <h1>Bugku Web｜矛盾</h1>
+    <h1>Bugku CTF｜矛盾 Writeup</h1>
+    <div class="author">作者：陆楷中</div>
 
-        <h2>题目信息</h2>
-        <div class="info-card">
-            <ul class="info-list">
-                <li>平台：Bugku CTF</li>
-                <li>类型：Web PHP弱类型审计</li>
-                <li>分值：10</li>
-                <li>题目链接：http://160.202.254.160:19590</li>
-            </ul>
-        </div>
+    <h2>题目描述</h2>
+    <p>Web基础CTF题目，页面直接给出PHP源码，考察PHP函数 <code>is_numeric()</code> 的弱类型绕过。</p>
 
-        <h2>源码</h2>
-        <div class="info-card">
-<pre>$num=$_GET['num'];
+    <h2>源码分析</h2>
+    <pre><code>$num=$_GET['num'];
 if(!is_numeric($num))
 {
-echo $num;
-if($num==1)
-echo 'flag{**********}';
-}</pre>
-        </div>
+    echo $num;
+    echo 'flag{**********}';
+}</code></pre>
+    <p>逻辑：GET传入参数num，如果 <code>is_numeric()</code> 判断不为数字，就输出num变量和flag。</p>
+    <p><code>is_numeric()</code> 只会判断是否为纯数字，我们传入数字+字母组合，即可绕过。</p>
 
-        <h2>考点</h2>
-        <div class="info-card">
-            <p>PHP弱类型比较 <code>==</code>，<code>is_numeric()</code>函数绕过。<br>
-            <code>is_numeric()</code>判断是否为数字/数字字符串；双等号==会自动做类型转换。</p>
-        </div>
+    <h2>解题思路</h2>
+    <p>构造GET参数，让 <code>num</code> 的值为数字加字母，例如 <code>1a</code>。</p>
+    <p>Payload：</p>
+<pre><code>?num=1a</code></pre>
 
-        <h2>解题思路</h2>
-        <div class="info-card">
-            <p>两个看起来互相矛盾的条件：
-            <br>1. <code>!is_numeric($num)</code>：传入参数<strong>不能是纯数字字符串</strong>，才能进入代码块。
-            <br>2. <code>$num ==1</code>：弱比较结果必须等于数字1。
-            <br>payload <code>?num=1a</code>：字符串<code>1a</code>不是纯数字，满足条件1；PHP和数字对比时，自动截取开头数字1，<code>"1a" ==1</code>结果为true，满足条件2。
-            </p>
-        </div>
+    <h2>访问靶机</h2>
+    <p>完整URL：<code>http://160.202.254.160:19590/?num=1a</code></p>
+    <p>页面输出：<code>1aflag{baaea44448d54fd4dfe722e1e171be20}</code></p>
+    <p>前面的 <code>1a</code> 是传入的参数，是回显的垃圾内容，真正flag在后面大括号内。</p>
 
-        <h2>解题步骤</h2>
-        <div class="info-card">
-            <ol class="steps">
-                <li>访问题目原始页面，查看源代码得到PHP代码</li>
-                <li>URL拼接GET参数构造payload：<code>?num=1a</code></li>
-                <li>完整访问链接：<code>http://160.202.254.160:19590/?num=1a</code></li>
-                <li>页面输出内容：<code>1aflag{bugku-789-ps-ssdf}</code></li>
-            </ol>
-        </div>
-
-        <h2>Flag</h2>
-        <div class="flag-block">
-            <div class="flag-text">flag{bugku-789-ps-ssdf}</div>
-        </div>
-
-        <a href="./index.html" class="back-btn">← 返回首页</a>
-
-        <footer>
-            <span>© 2026 陆楷中</span>
-            <span>GitHub Pages | CTF Writeup</span>
-        </footer>
+    <h2>Flag</h2>
+    <div class="flag-box">
+        <code>flag{baaea44448d54fd4dfe722e1e171be20}</code>
     </div>
-</div>
+
+    <h2>踩坑记录</h2>
+    <ul style="padding-left:22px;margin-bottom:16px;">
+        <li>靶机会动态刷新，每次重启flag哈希串会改变，不要使用网上旧的固定flag字符串；</li>
+        <li>提交flag必须使用<strong>大括号 { }</strong>，不能写成圆括号 ( )；</li>
+        <li>不要复制多余空格、顿号等符号，多余字符会直接判定flag错误。</li>
+    </ul>
+
 </body>
 </html>
