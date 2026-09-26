@@ -3,111 +3,113 @@
 <head>
 <meta charset="UTF‑8">
 <meta name="viewport" content="width=device‑width, initial‑scale=1.0">
-<title>Bugku‑这不是md5 Writeup</title>
+<title>Bugku‑这不是md5 writeup</title>
 <style>
 *{margin:0;padding:0;box‑sizing:border‑box;}
-body{
-    background‑color:#0e1014;
-    color:#c5c8d1;
-    font‑family:"Consolas","JetBrains Mono",monospace;
-    max‑width:960px;
-    margin:40px auto;
-    padding:0 20px;
-    line‑height:1.7;
+body {
+    min‑height:100vh;
+    background:
+        radial‑gradient(circle at 15% 10%, rgba(24,120,180,0.12), transparent 45%),
+        radial‑gradient(circle at 85% 80%, rgba(18,160,120,0.08), transparent 45%),
+        #07090d;
+    color:#d6deeb;
+    font‑family:"JetBrains Mono",Consolas,monospace;
+    padding:40px 20px 60px;
+    display:flex;
+    justify‑content:center;
 }
-.window‑bar{
-    background‑color:#181a20;
-    border:1px solid #2b2f38;
-    border‑radius:8px 8px 0 0;
-    padding:10px 16px;
-    display:flex;gap:8px;align‑items:center;
+.window‑container {
+    width:100%;
+    max‑width:980px;
+    border‑radius:18px;
+    border:1px solid rgba(148,163,184,0.18);
+    background:linear‑gradient(145deg, rgba(22,30,44,0.75),rgba(12,18,30,0.85));
+    box‑shadow:0 25px 70px rgba(0,0,0,0.65), 0 0 1px rgba(125,211,252,0.15);
+    backdrop‑filter: blur(14px);
+    overflow:hidden;
 }
-.dot{width:12px;height:12px;border‑radius:50%;}
+.window‑header {
+    padding:14px 20px;
+    border‑bottom:1px solid rgba(148,163,184,0.15);
+    display:flex;
+    align‑items:center;
+    gap:10px;
+}
+.dot {
+    width:12px;height:12px;border‑radius:50%;
+}
 .dot‑red{background:#ef5350;}
 .dot‑yellow{background:#ffca28;}
 .dot‑green{background:#66bb6a;}
-.window‑title{margin‑left:12px;color:#828894;font‑size:14px;}
-.content‑box{
-    border:1px solid #2b2f38;
-    border‑top:none;
-    border‑radius:0 0 8px 8px;
-    background:#14171d;
-    padding:28px;
+.win‑title{
+    font‑size:13px;
+    color:#94a3b8;
 }
-h1{color:#74b0ff;font‑size:22px;margin‑bottom:12px;}
-.meta{color:#646b78;font‑size:14px;margin‑bottom:24px;}
-h2{color:#91b9ee;margin‑top:24px;margin‑bottom:8px;font‑size:18px;}
-code{
-    background:#1e222b;
-    padding:2px 6px;
-    border‑radius:4px;
-    color:#ffb86c;
+.content‑wrap{
+    padding:34px;
+}
+h1{color:#7dd3fc;font‑size:22px;margin‑bottom:12px;}
+.meta‑text{
+    color:#646b78;
+    font‑size:14px;
+    margin‑bottom:24px;
 }
 pre{
-    background:#1e222b;
-    padding:14px;
-    border‑radius:6px;
+    background:rgba(15,23,42,0.65);
+    border:1px solid rgba(148,163,184,0.18);
+    border‑radius:10px;
+    padding:18px;
     overflow‑x:auto;
-    margin:12px 0;
+    margin:16px 0;
+    color:#94e2d5;
 }
-.flag{
-    border:1px solid #274b7a;
-    background:#172336;
-    padding:10px;
-    border‑radius:6px;
-    color:#62d0ff;
-}
-.back‑link{
-    margin‑top:30px;
-}
-.back‑link a{
+.back‑btn{
     display:inline‑block;
-    padding:8px 14px;
-    border:1px solid #2b2f38;
-    border‑radius:6px;
-    color:#b4b9c7;
+    margin‑top:24px;
+    padding:10px 18px;
+    border‑radius:10px;
+    border:1px solid rgba(125,211,252,0.25);
+    color:#7dd3fc;
     text‑decoration:none;
-    transition:0.18s;
+    transition:0.22s ease;
+    background:rgba(30,41,59,0.4);
 }
-.back‑link a:hover{
-    border‑color:#3b74c2;
-    color:#74b0ff;
-    background‑color:#19202c;
+.back‑btn:hover{
+    background:rgba(56,189,248,0.18);
+    box‑shadow:0 0 14px rgba(56,189,248,0.25);
 }
-footer{margin‑top:30px;font‑size:13px;color:#646b78;text‑align:center;}
+footer{
+    margin‑top:36px;
+    padding‑top:16px;
+    border‑top:1px dashed rgba(148,163,184,0.18);
+    font‑size:13px;
+    color:#64748b;
+    display:flex;
+    justify‑content:space‑between;
+}
 </style>
 </head>
 <body>
-<div class="window‑bar">
-    <div class="dot dot‑red"></div>
-    <div class="dot dot‑yellow"></div>
-    <div class="dot dot‑green"></div>
-    <div class="window‑title">bugku‑crypto‑not‑md5.html</div>
-</div>
-<div class="content‑box">
-    <h1>BugkuCTF｜这不是md5 Writeup</h1>
-    <div class="meta">作者：陆楷中 | Crypto密码学 | Hex十六进制转ASCII</div>
+<div class="window‑container">
+    <div class="window‑header">
+        <div class="dot dot‑red"></div>
+        <div class="dot dot‑yellow"></div>
+        <div class="dot dot‑green"></div>
+        <div class="win‑title">bugku‑crypto‑not‑md5.html — Writeup</div>
+    </div>
+    <div class="content‑wrap">
+        <h1>Bugku‑这不是md5 writeup</h1>
+        <div class="meta‑text">Bugku CTF｜Crypto 密码学</div>
 
-    <h2>题目描述</h2>
-    <p>题目给出一串十六进制字符串，名字叫“这不是md5”，提示不要当做md5哈希解密。</p>
-    <p>密文：<code>666c61677b6165373335383762616566357d</code></p>
+        <!-- 把你全部原来解题内容粘贴在这里 -->
 
-    <h2>解题思路</h2>
-    <p>观察字符串长度为偶数，是标准Hex(十六进制)编码，每两个十六进制字符对应1个ASCII字节。</p>
-    <p>使用Python进行bytes.fromhex()解码。</p>
 
-<h2>Python解密代码</h2>
-<pre><code>hex_str = "666c61677b6165373335383762616566357d"
-res = bytes.fromhex(hex_str).decode("utf‑8")
-print(res)</code></pre>
-
-    <h2>输出Flag</h2>
-    <div class="flag">flag{ae73587ba56baef5}</div>
-
-    <div class="back‑link">
-        <a href="./index.html">← 返回首页</a>
+        <a href="./index.html" class="back‑btn">← 返回首页</a>
+        <footer>
+            <span>© 2026 陆楷中</span>
+            <span>GitHub Pages</span>
+        </footer>
     </div>
 </div>
-<footer>© 2026 陆楷中 | GitHub Pages</footer>
 </body>
 </html>
