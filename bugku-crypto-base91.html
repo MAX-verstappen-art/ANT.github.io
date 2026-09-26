@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bugku Crypto｜贝斯家族 Writeup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 20% 10%, rgba(56,189,248,0.08), transparent 45%),
+                radial-gradient(circle at 80% 85%, rgba(16,185,129,0.06), transparent 45%),
+                #07090d;
+            color: #cbd5e1;
+            font-family: "JetBrains Mono", Fira Code, Consolas, monospace;
+            padding: 40px 20px 60px;
+            display: flex;
+            justify-content: center;
+        }
+        .glass-shell {
+            width:100%;
+            max-width:920px;
+            border-radius: 18px;
+            border: 1px solid rgba(148,163,184,0.18);
+            background: linear-gradient(145deg, rgba(22,30,44,0.75), rgba(12,18,30,0.85));
+            box-shadow:0 22px 60px rgba(0,0,0,0.45);
+            overflow:hidden;
+        }
+        .window-bar {
+            padding:14px 20px;
+            border-bottom:1px solid rgba(148,163,184,0.14);
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+        .dot {
+            width:12px;
+            height:12px;
+            border-radius:50%;
+        }
+        .dot-red{background:#ff5f57;}
+        .dot-yellow{background:#ffbd2e;}
+        .dot-green{background:#28c840;}
+        .win-title{font-size:13px;color:#94a3b8;margin-left:8px;}
+        .content {
+            padding:36px;
+        }
+        h1 {
+            color:#7dd3fc;
+            font-size:24px;
+            margin-bottom:16px;
+        }
+        h2 {
+            color:#a5f3fc;
+            font-size:18px;
+            margin:28px 0 12px;
+        }
+        .info-card {
+            background:rgba(15,23,42,0.55);
+            border:1px solid rgba(148,163,184,0.14);
+            border-radius:10px;
+            padding:16px 18px;
+        }
+        ul.info-list {
+            padding-left:22px;
+            line-height:1.75;
+        }
+        ol.steps {
+            padding-left:24px;
+            line-height:1.8;
+        }
+        p {
+            line-height:1.7;
+        }
+        code{
+            color:#fcd34d;
+            font-family:monospace;
+        }
+        .flag-block {
+            margin-top:14px;
+            background:rgba(30,41,59,0.6);
+            border-left:4px solid #4ade80;
+            padding:14px 18px;
+            border-radius:8px;
+        }
+        .flag-text{
+            color:#86efac;
+            font-family:monospace;
+        }
+        .back-btn {
+            display:inline-block;
+            margin-top:36px;
+            padding:9px 20px;
+            border-radius:10px;
+            border:1px solid rgba(125,211,252,0.35);
+            color:#7dd3fc;
+            text-decoration:none;
+            background:rgba(30,41,59,0.4);
+            transition:0.2s ease;
+        }
+        .back-btn:hover{
+            background:rgba(56,189,248,0.16);
+        }
+        .back-btn:active{
+            transform:scale(0.97);
+        }
+        footer {
+            margin-top:40px;
+            padding-top:16px;
+            border-top:1px dashed rgba(148,163,184,0.16);
+            display:flex;
+            justify-content:space-between;
+            font-size:13px;
+            color:#64748b;
+        }
+    </style>
+</head>
+<body>
+<div class="glass-shell">
+    <div class="window-bar">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+        <div class="win-title">bugku-crypto-base91.html — Writeup</div>
+    </div>
+    <div class="content">
+        <h1>Bugku Crypto｜贝斯家族</h1>
+
+        <h2>题目信息</h2>
+        <div class="info-card">
+            <ul class="info-list">
+                <li>平台：Bugku CTF</li>
+                <li>类型：Crypto</li>
+                <li>分值：30</li>
+                <li>密文：<code>@iH<,{bdR2H;i6*Tm,Wx2izpx2!</code></li>
+            </ul>
+        </div>
+
+        <h2>考点</h2>
+        <div class="info-card">
+            <p>Base家族编码识别，Base91解码。Base91字符集包含特殊符号@、{、*等，base64/32不会出现这些字符。</p>
+        </div>
+
+        <h2>解题思路</h2>
+        <div class="info-card">
+            <p>“贝斯”谐音base，代表base系列编码。观察密文包含<code>@ { , *</code>特殊符号，base64/32均不支持这些字符，尝试Base91解码直接拿到flag。</p>
+        </div>
+
+        <h2>解题步骤</h2>
+        <div class="info-card">
+            <ol class="steps">
+                <li>获取题目密文：<code>@iH<,{bdR2H;i6*Tm,Wx2izpx2!</code></li>
+                <li>依次尝试base64、base32解码，解码失败；</li>
+                <li>使用Base91在线解密工具对密文进行解码；</li>
+                <li>解密输出flag。</li>
+            </ol>
+        </div>
+
+        <h2>Flag</h2>
+        <div class="flag-block">
+            <div class="flag-text">flag{554a5058c9021c76}</div>
+        </div>
+
+        <a href="./index.html" class="back-btn">← 返回首页</a>
+
+        <footer>
+            <span>© 2026 陆楷中</span>
+            <span>GitHub Pages | CTF Writeup</span>
+        </footer>
+    </div>
+</div>
+</body>
+</html>
