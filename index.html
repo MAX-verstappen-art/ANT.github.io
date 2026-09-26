@@ -22,6 +22,11 @@
             padding: 40px 20px 60px;
             display: flex;
             justify-content: center;
+            transition: background 0.3s ease;
+        }
+        body.dark-mode-2{
+            background: #020305;
+            color:#b8c2cc;
         }
 
         .glass-shell {
@@ -34,6 +39,10 @@
             backdrop-filter: blur(14px);
             -webkit-backdrop-filter: blur(14px);
             overflow: hidden;
+            transition: background 0.3s ease;
+        }
+        body.dark-mode-2 .glass-shell{
+            background: linear-gradient(145deg, rgba(14, 19, 28, 0.85), rgba(6, 9, 15, 0.95));
         }
 
         .window-bar {
@@ -48,6 +57,15 @@
             width: 12px;
             height: 12px;
             border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .dot:hover{
+            transform: scale(1.35);
+            filter: brightness(1.2);
+        }
+        .dot:active{
+            transform: scale(0.9);
         }
         .dot-red { background: linear-gradient(145deg, #ff6058, #d9443c); }
         .dot-yellow { background: linear-gradient(145deg, #ffd166, #e0b143); }
@@ -163,9 +181,10 @@
 <body>
     <div class="glass-shell">
         <div class="window-bar">
-            <div class="dot dot-red"></div>
-            <div class="dot dot-yellow"></div>
-            <div class="dot dot-green"></div>
+            <!-- 增加onclick交互事件 -->
+            <div class="dot dot-red" onclick="alert('CTF Writeup Archive\n作者：陆楷中\n仓库：GitHub Pages')"></div>
+            <div class="dot dot-yellow" onclick="window.scrollTo({top:0,behavior:'smooth'})"></div>
+            <div class="dot dot-green" onclick="document.body.classList.toggle('dark-mode-2')"></div>
             <div class="window-title">index.html — CTF Writeup Archive</div>
         </div>
 
