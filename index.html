@@ -2,7 +2,8 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>陆楷中的CTF博客</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CTF Writeup Archive | Bugku Solution Collection</title>
     <style>
         * {
             margin: 0;
@@ -10,52 +11,54 @@
             box-sizing: border-box;
         }
         body {
-            background: #0f1115;
-            color: #e6edf3;
-            font-family: "JetBrains Mono", system-ui, -apple-system, sans-serif;
-            max-width: 900px;
+            background-color: #0e1014;
+            color: #c5c8d1;
+            font-family: "Consolas", "JetBrains Mono", monospace;
+            max-width: 960px;
             margin: 40px auto;
             padding: 0 20px;
-            line-height: 1.8;
+            line-height: 1.65;
         }
-        /* 头部终端卡片 */
-        .terminal-header {
-            background: #161b22;
-            border: 1px solid #30363d;
-            border-radius: 12px;
-            overflow: hidden;
-            margin-bottom: 36px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-        }
-        .terminal-bar {
-            background: #21262d;
-            padding: 10px 16px;
-            display: flex;
-            gap: 8px;
-            align-items: center;
+        /* 顶部模拟窗口栏 */
+        .window-bar {
+            background-color:#181a20;
+            border:1px solid #2b2f38;
+            border-radius:8px 8px 0 0;
+            padding:10px 16px;
+            display:flex;
+            gap:8px;
+            align-items:center;
         }
         .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
+            width:12px;
+            height:12px;
+            border-radius:50%;
         }
-        .dot-red {background: #ff5f56;}
-        .dot-yellow {background: #ffbd2e;}
-        .dot-green {background: #27c93f;}
-        .terminal-content {
-            padding: 28px;
+        .dot-red { background:#ef5350; }
+        .dot-yellow { background:#ffca28; }
+        .dot-green { background:#66bb6a; }
+        .window-title {
+            margin-left:12px;
+            color:#828894;
+            font-size:14px;
+        }
+        .terminal-box {
+            border:1px solid #2b2f38;
+            border-top:none;
+            border-radius:0 0 8px 8px;
+            background:#14171d;
+            padding:24px;
         }
         .author {
-            font-size: 28px;
-            font-weight: 700;
-            color: #39d353;
-            margin-bottom: 8px;
+            color:#5c9ce6;
+            font-size:15px;
+            margin-bottom:8px;
         }
         .subtitle {
-            color: #8b949e;
-            font-size: 14px;
+            color:#9096a2;
+            font-size:14px;
+            margin-bottom:28px;
         }
-        /* 列表样式 */
         ul {
             list-style: none;
         }
@@ -63,83 +66,66 @@
             margin: 10px 0;
         }
         a {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px 16px;
-            border-radius: 8px;
-            color: #79c0ff;
-            text-decoration: none;
-            background: #161b22;
-            border: 1px solid #30363d;
-            /* 点击反馈动画 */
-            transition: all 0.15s ease-out;
+            display:block;
+            padding:12px 14px;
+            border:1px solid #2b2f38;
+            border-radius:6px;
+            color:#b4b9c7;
+            text-decoration:none;
+            transition: all 0.18s ease-in-out;
         }
-        a::before {
-            content: ">";
-            color: #39d353;
-            font-weight: 700;
-        }
+        /* hover悬浮效果 */
         a:hover {
-            border-color: #39d353;
-            color: #39d353;
-            transform: translateX(6px);
+            border-color:#3b74c2;
+            color:#74b0ff;
+            background-color:#19202c;
         }
         /* 鼠标点击按压反馈 */
         a:active {
-            transform: scale(0.98);
-            background: #21262d;
-            border-color: #39d353;
+            transform: scale(0.985);
+            border-color:#5c9ce6;
         }
-        /* 底部署名 */
         footer {
-            margin-top: 48px;
-            padding-top: 20px;
-            border-top: 1px solid #30363d;
-            text-align: center;
-            color: #8b949e;
-            font-size: 13px;
+            margin-top:36px;
+            font-size:13px;
+            color:#646b78;
+            text-align:center;
         }
     </style>
 </head>
 <body>
-    <!-- 头部终端卡片 + 署名 -->
-    <div class="terminal-header">
-        <div class="terminal-bar">
-            <div class="dot dot-red"></div>
-            <div class="dot dot-yellow"></div>
-            <div class="dot dot-green"></div>
-        </div>
-        <div class="terminal-content">
-            <div class="author">陆楷中</div>
-            <div class="subtitle">// CTF Writeup Archive | Bugku Solution Collection</div>
-        </div>
+    <div class="window-bar">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+        <div class="window-title">index.html — CTF Writeup</div>
+    </div>
+    <div class="terminal-box">
+        <div class="author">陆楷中</div>
+        <div class="subtitle">// CTF Writeup Archive | Bugku Solution Collection</div>
+
+        <ul>
+            <li><a href="1.html">点击查看我的第一个帖子</a></li>
+            <li><a href="calc.html">Bugku计算器 Writeup</a></li>
+            <li><a href="alert.html">Bugku alert Writeup</a></li>
+            <li><a href="phpget.html">Bugku PHP GET传参 Writeup</a></li>
+            <li><a href="First%20Class.html">Bugku 头等舱 Writeup</a></li>
+            <li><a href="./bugku-web-ni-bi-xu-rang-ta-ting-xia.html">Bugku Web - 你必须让他停下</a></li>
+            <li><a href="./Bugku-source">Bugku-source</a></li>
+            <li><a href="./bugku-misc-simple-image.html">Bugku MISC - 单纯的图片</a></li>
+            <li><a href="./bugku-crypto-smart-sheep.html">Bugku Crypto - 聪明的小羊</a></li>
+            <li><a href="./bugku-reverse-basic.html">Bugku Reverse - 入门逆向</a></li>
+            <li><a href="./bugku-pwn-swiss-army.html">Bugku PWN - 瑞士军刀 Writeup</a></li>
+            <li><a href="./bugku-crypto-morse.html">Bugku Crypto - -摩斯密码</a></li>
+            <li><a href="./bugku-crypto-ook.html">2026‑9‑24 Bugku Crypto - Ook(Ook!编码)</a></li>
+            <li><a href="./bugku-crypto-brainfuck.html">Bugku Crypto - [+-] Brainfuck</a></li>
+            <li><a href="./bugku-misc-fqmqz.html">Bugku‑Misc | 富强民主</a></li>
+            <li><a href="./bugku-crypto-miwen.html">2026‑9‑24 Bugku Crypto - 散乱的密文 Writeup</a></li>
+            <!-- 新题目 这不是md5，直接放在这里 -->
+            <li><a href="./bugku-crypto-not-md5.html">2026‑09‑24 Bugku Crypto - 这不是md5 Writeup</a></li>
+        </ul>
     </div>
 
-    <!-- 所有原有题解链接，完整保留 -->
-    <ul>
-        <li><a href="1.html">点击查看我的第一个帖子</a></li>
-        <li><a href="calc.html">Bugku计算器 Writeup</a></li>
-        <li><a href="alert.html">Bugku alert Writeup</a></li>
-        <li><a href="phpget.html">Bugku PHP GET传参 Writeup</a></li>
-        <li><a href="funny.html">Bugku 滑稽Writeup</a></li>
-        <li><a href="post.html">Bugku POST传参 Writeup</a></li>
-        <li><a href="First%20class.html">Bugku 头等舱 Writeup</a></li>
-        <li><a href="./bugku-web-你必须让他停下.html">Bugku Web - 你必须让他停下</a></li>
-        <li><a href="./Bugku-source">Bugku-source</a></li>
-        <li><a href="./bugku-misc-单纯的图片.html">Bugku MISC - 这是一张单纯的图片</a></li>
-        <li><a href="./bugku-crypto-聪明的小羊.html">Bugku Crypto - 聪明的小羊</a></li>
-        <li><a href="./bugku-reverse-basic.html">Bugku Reverse - 入门逆向</a></li>
-        <li><a href="./bugku-pwn-swiss-army.html">Bugku PWN - 瑞士军刀 Writeup</a></li>
-        <li><a href="bugku-crypto-morse.html">Bugku Crypto - ./-摩斯密码</a></li>
-        <li><a href="bugku-crypto-ook.html">2026-9-24 Bugku Crypto - Ook(Ook!编码)</a></li>
-        <li><a href="bugku-crypto-brainfuck.html">Bugku Crypto - [+-] Brainfuck</a></li>
-        <li><a href="./bugku-misc-linux.html">Bugku-Misc | linux</a></li>
-        <li><a href="./bugku-misc-fqmz.html">Bugku-Misc | 富强民主</a></li>
-        <li><a href="./bugku-crypto-miwen.html">2026-9-24 Bugku Crypto - 散乱的密文 Writeup</a></li>
-    </ul>
-
-    <!-- 底部署名 -->
     <footer>
         © 2026 陆楷中 | Built with GitHub Pages
     </footer>
