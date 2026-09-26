@@ -108,8 +108,46 @@
             transform: scale(0.98);
         }
 
+        /* 分页按钮 */
+        .page-box {
+            margin-top: 28px;
+            padding-top: 20px;
+            border-top: 1px dashed rgba(148, 163, 184, 0.18);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 14px;
+        }
+
+        .page-btn {
+            padding: 8px 18px;
+            border-radius: 8px;
+            border: 1px solid rgba(148, 163, 184, 0.3);
+            background: rgba(30, 41, 59, 0.6);
+            color: #7dd3fc;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 14px;
+            transition: all 0.18s ease;
+        }
+
+        .page-btn:hover:not(:disabled) {
+            background: rgba(56, 189, 248, 0.15);
+            border-color: rgba(125, 211, 252, 0.5);
+        }
+
+        .page-btn:disabled {
+            opacity: 0.35;
+            cursor: not-allowed;
+        }
+
+        .page-info {
+            color: #8aa0b7;
+            font-size: 14px;
+        }
+
         footer {
-            margin-top: 36px;
+            margin-top: 30px;
             padding-top: 18px;
             border-top: 1px dashed rgba(148, 163, 184, 0.18);
             font-size: 13px;
@@ -135,9 +173,9 @@
             <div class="author">陆楷中</div>
             <div class="subtitle">// CTF Writeup Archive | <span>Bugku Solution Collection</span></div>
 
-            <ul>
+            <ul id="writeup-list">
                 <li><a href="./1.html">点击查看我的第一个帖子</a></li>
-                <li><a href="./calc.html">Bugku 计算器 Writeup</a></li>
+                <li><a href="./calc.html">2026-09-24 Bugku Web - 计算器</a></li>
                 <li><a href="./alert.html">Bugku alert Writeup</a></li>
                 <li><a href="./phpget.html">Bugku PHP GET传参 Writeup</a></li>
                 <li><a href="./first-class.html">Bugku 头等舱 Writeup</a></li>
@@ -155,8 +193,15 @@
                 <li><a href="./bugku-crypto-not-md5.html">2026-09-24 Bugku Crypto - 这不是md5</a></li>
                 <li><a href="./bugku-crypto-base91.html">2026-09-25 Bugku Crypto - 贝斯家族(Base91)</a></li>
                 <li><a href="./bugku-web-maodun.html">2026-09-26 Bugku Web - 矛盾(PHP弱类型)</a></li>
-                <li><a href="./bugku_pigpen.html">2026‑09‑26 Bugku Crypto - 把猪困在猪圈里</a></li>
+                <li><a href="./bugku_pigpen.html">2026-09-26 Bugku Crypto - 把猪困在猪圈里</a></li>
             </ul>
+
+            <!-- 分页按钮 -->
+            <div class="page-box">
+                <button class="page-btn" id="btn-prev">上一页</button>
+                <span class="page-info" id="page-info"></span>
+                <button class="page-btn" id="btn-next">下一页</button>
+            </div>
 
             <footer>
                 <span>© 2026 陆楷中</span>
@@ -164,5 +209,46 @@
             </footer>
         </div>
     </div>
+
+    <script>
+        const ITEM_PER_PAGE = 15;
+        let currentPage = 1;
+
+        const listDom = document.getElementById('writeup-list');
+        const allItems = Array.from(listDom.querySelectorAll('li'));
+        const btnPrev = document.getElementById('btn-prev');
+        const btnNext = document.getElementById('btn-next');
+        const pageInfo = document.getElementById('page-info');
+
+        const totalPages = Math.ceil(allItems.length / ITEM_PER_PAGE);
+
+        function renderPage(page) {
+            allItems.forEach(li => li.style.display = 'none');
+            const start = (page - 1) * ITEM_PER_PAGE;
+            const end = start + ITEM_PER_PAGE;
+            for (let i = start; i < end && i < allItems.length; i++) {
+                allItems[i].style.display = 'list-item';
+            }
+            pageInfo.innerText = `第 ${page} / ${totalPages} 页`;
+            btnPrev.disabled = (page <= 1);
+            btnNext.disabled = (page >= totalPages);
+        }
+
+        btnPrev.onclick = () => {
+            if (currentPage > 1) {
+                currentPage--;
+                renderPage(currentPage);
+            }
+        };
+
+        btnNext.onclick = () => {
+            if (currentPage < totalPages) {
+                currentPage++;
+                renderPage(currentPage);
+            }
+        };
+
+        renderPage(currentPage);
+    </script>
 </body>
 </html>
