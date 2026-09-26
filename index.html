@@ -19,14 +19,35 @@
                 #07090d;
             color: #d6deeb;
             font-family: "JetBrains Mono", "Fira Code", Consolas, "Microsoft YaHei", monospace;
-            padding: 40px 20px 60px;
+            /* 顶部留出固定栏的高度 */
+            padding: 76px 20px 60px;
             display: flex;
             justify-content: center;
             transition: background 0.3s ease;
         }
-        body.dark-mode-2{
+        body.dark-mode-2 {
             background: #020305;
-            color:#b8c2cc;
+            color: #b8c2cc;
+        }
+
+        /* ===== 固定悬浮的窗口栏（始终跟随页面） ===== */
+        .window-bar {
+            position: fixed;
+            top: 16px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: min(860px, calc(100% - 40px));
+            z-index: 999;
+            padding: 12px 18px;
+            border-radius: 12px;
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            background: linear-gradient(145deg, rgba(22, 30, 44, 0.92), rgba(12, 18, 30, 0.95));
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .glass-shell {
@@ -41,35 +62,43 @@
             overflow: hidden;
             transition: background 0.3s ease;
         }
-        body.dark-mode-2 .glass-shell{
+        body.dark-mode-2 .glass-shell {
             background: linear-gradient(145deg, rgba(14, 19, 28, 0.85), rgba(6, 9, 15, 0.95));
         }
 
-        .window-bar {
-            padding: 14px 20px;
-            border-bottom: 1px solid rgba(148, 163, 184, 0.15);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
+        /* ===== 三个圆点 ===== */
         .dot {
             width: 12px;
             height: 12px;
             border-radius: 50%;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
         }
-        .dot:hover{
-            transform: scale(1.35);
-            filter: brightness(1.2);
+        .dot:hover {
+            transform: scale(1.4);
+            filter: brightness(1.25);
         }
-        .dot:active{
+        .dot:active {
             transform: scale(0.9);
         }
-        .dot-red { background: linear-gradient(145deg, #ff6058, #d9443c); }
-        .dot-yellow { background: linear-gradient(145deg, #ffd166, #e0b143); }
-        .dot-green { background: linear-gradient(145deg, #69db7c, #3fa358); }
+        .dot-red {
+            background: linear-gradient(145deg, #ff6058, #d9443c);
+        }
+        .dot-red:hover {
+            box-shadow: 0 0 12px rgba(255, 96, 88, 0.7);
+        }
+        .dot-yellow {
+            background: linear-gradient(145deg, #ffd166, #e0b143);
+        }
+        .dot-yellow:hover {
+            box-shadow: 0 0 12px rgba(255, 209, 102, 0.7);
+        }
+        .dot-green {
+            background: linear-gradient(145deg, #69db7c, #3fa358);
+        }
+        .dot-green:hover {
+            box-shadow: 0 0 12px rgba(105, 219, 124, 0.7);
+        }
 
         .window-title {
             margin-left: 8px;
@@ -95,13 +124,8 @@
         }
         .subtitle span { color: #4ade80; }
 
-        ul {
-            list-style: none;
-        }
-
-        li {
-            margin: 10px 0;
-        }
+        ul { list-style: none; }
+        li { margin: 10px 0; }
 
         a {
             display: block;
@@ -114,17 +138,13 @@
             background: rgba(30, 41, 59, 0.45);
             transition: all 0.18s ease;
         }
-
         a:hover {
             border-color: rgba(125, 211, 252, 0.5);
             background: rgba(56, 189, 248, 0.12);
             color: #e0f2fe;
             transform: translateX(4px);
         }
-
-        a:active {
-            transform: scale(0.98);
-        }
+        a:active { transform: scale(0.98); }
 
         /* 分页按钮 */
         .page-box {
@@ -136,7 +156,6 @@
             justify-content: center;
             gap: 14px;
         }
-
         .page-btn {
             padding: 8px 18px;
             border-radius: 8px;
@@ -148,17 +167,14 @@
             font-size: 14px;
             transition: all 0.18s ease;
         }
-
         .page-btn:hover:not(:disabled) {
             background: rgba(56, 189, 248, 0.15);
             border-color: rgba(125, 211, 252, 0.5);
         }
-
         .page-btn:disabled {
             opacity: 0.35;
             cursor: not-allowed;
         }
-
         .page-info {
             color: #8aa0b7;
             font-size: 14px;
@@ -179,15 +195,15 @@
     </style>
 </head>
 <body>
-    <div class="glass-shell">
-        <div class="window-bar">
-            <!-- 增加onclick交互事件 -->
-            <div class="dot dot-red" onclick="alert('CTF Writeup Archive\n作者：陆楷中\n仓库：GitHub Pages')"></div>
-            <div class="dot dot-yellow" onclick="window.scrollTo({top:0,behavior:'smooth'})"></div>
-            <div class="dot dot-green" onclick="document.body.classList.toggle('dark-mode-2')"></div>
-            <div class="window-title">index.html — CTF Writeup Archive</div>
-        </div>
+    <!-- 固定悬浮的窗口栏 -->
+    <div class="window-bar">
+        <div class="dot dot-red" onclick="alert('CTF Writeup Archive\n作者：陆楷中\n仓库：GitHub Pages')" title="关于"></div>
+        <div class="dot dot-yellow" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部"></div>
+        <div class="dot dot-green" onclick="document.body.classList.toggle('dark-mode-2')" title="切换深色主题"></div>
+        <div class="window-title">index.html — CTF Writeup Archive</div>
+    </div>
 
+    <div class="glass-shell">
         <div class="glass-inner">
             <div class="author">陆楷中</div>
             <div class="subtitle">// CTF Writeup Archive | <span>Bugku Solution Collection</span></div>
@@ -215,7 +231,6 @@
                 <li><a href="./bugku_pigpen.html">2026-09-26 Bugku Crypto - 把猪困在猪圈里</a></li>
             </ul>
 
-            <!-- 分页按钮 -->
             <div class="page-box">
                 <button class="page-btn" id="btn-prev">上一页</button>
                 <span class="page-info" id="page-info"></span>
