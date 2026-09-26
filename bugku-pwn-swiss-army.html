@@ -1,78 +1,197 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <title>Bugku‑PWN‑瑞士军刀 Writeup</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bugku-PWN｜swiss‑army Writeup</title>
     <style>
-        body {
-            font-family: system-ui, sans‑serif;
-            max-width:920px;
-            margin:40px auto;
-            padding:0 24px;
-            line-height:1.8;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        h1{font-size:24px;margin-bottom:12px;}
-        h2{font-size:20px;margin-top:28px;margin-bottom:10px;}
-        h3{font-size:17px;margin-top:20px;}
+
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 12% 8%, rgba(56, 189, 248, 0.12), transparent 48%),
+                radial-gradient(circle at 88% 82%, rgba(20, 184, 166, 0.08), transparent 48%),
+                #070b10;
+            color: #cbd5e1;
+            font-family: "JetBrains Mono", Fira Code, Consolas, monospace;
+            padding: 40px 20px 60px;
+            display: flex;
+            justify-content: center;
+        }
+
+        .glass-shell {
+            width: 100%;
+            max-width: 980px;
+            border-radius: 18px;
+            border: 1px solid rgba(148,163,184,0.18);
+            background: linear-gradient(145deg, rgba(22,30,44,0.76), rgba(10,16,28,0.88));
+            box-shadow: 0 24px 80px rgba(0,0,0,0.7);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            overflow: hidden;
+        }
+
+        .window-bar {
+            padding:14px 20px;
+            border-bottom:1px solid rgba(148,163,184,0.14);
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+        .dot {
+            width:12px;
+            height:12px;
+            border-radius:50%;
+        }
+        .dot-red{background:#ff5f57;}
+        .dot-yellow{background:#ffbd2e;}
+        .dot-green{background:#28ca42;}
+        .window-title{
+            font-size:13px;
+            color:#94a3b8;
+        }
+
+        .content-wrap{
+            padding:34px;
+        }
+
+        h1{
+            color:#7dd3fc;
+            font-size:22px;
+            margin-bottom:12px;
+        }
+        .meta{
+            font-size:14px;
+            color:#64748b;
+            margin-bottom:26px;
+        }
+
+        h2{
+            color:#a5f3fc;
+            font-size:18px;
+            margin:28px 0 12px;
+        }
+        h3{
+            color:#bae6fd;
+            font-size:16px;
+            margin:20px 0 8px;
+        }
+
+        p{
+            line-height:1.7;
+            margin:10px 0;
+            color:#cbd5e1;
+        }
+
+        ul{
+            padding-left:22px;
+            margin:12px 0;
+            line-height:1.7;
+        }
+
+        code{
+            background:rgba(15,23,42,0.65);
+            color:#fcd34d;
+            padding:2px 6px;
+            border-radius:4px;
+        }
+
+        .tip-box{
+            border-left:3px solid #38bdf8;
+            background:rgba(56,189,248,0.07);
+            padding:12px 14px;
+            border-radius:6px;
+            margin:14px 0;
+            font-size:14px;
+            color:#94a3b8;
+        }
+
         pre{
-            background:#f3f3f3;
-            padding:14px;
-            border‑radius:6px;
-            overflow‑x:auto;
+            background:#0f172a;
+            padding:16px;
+            border-radius:10px;
+            overflow-x:auto;
+            margin:14px 0;
+            color:#94e2d5;
+        }
+
+        .back-btn{
+            display:inline-block;
+            margin-top:34px;
+            padding:9px 20px;
+            border:1px solid rgba(125,211,252,0.3);
+            border-radius:10px;
+            color:#7dd3fc;
+            background:rgba(30,41,59,0.45);
+            text-decoration:none;
+            transition:0.22s ease;
+        }
+        .back-btn:hover{
+            background:rgba(56,189,248,0.14);
+            box-shadow:0 0 12px rgba(56,189,248,0.18);
+        }
+        .back-btn:active{
+            transform:scale(0.97);
+        }
+
+        footer{
+            margin-top:40px;
+            padding-top:16px;
+            border-top:1px dashed rgba(148,163,184,0.14);
+            display:flex;
+            justify-content:space-between;
+            font-size:13px;
+            color:#64748b;
         }
     </style>
 </head>
 <body>
-<h1>Bugku CTF‑ PWN‑ 瑞士军刀 Writeup</h1>
+<div class="glass-shell">
+    <div class="window-bar">
+        <div class="dot dot-red"></div>
+        <div class="dot dot-yellow"></div>
+        <div class="dot dot-green"></div>
+        <div class="window-title">bugku-pwn-swiss-army.html — Writeup</div>
+    </div>
+    <div class="content-wrap">
+        <h1>Bugku‑PWN｜swiss‑army</h1>
+        <div class="meta">平台：Bugku CTF｜题型：PWN</div>
 
-<h2>题目信息</h2>
-<ul>
-<li>题目名称：瑞士军刀</li>
-<li>题目类型：PWN</li>
-<li>题目分值：10分</li>
-<li>题目状态：已解决</li>
-<li>靶机地址：<code>nc 160.202.254.160 14273</code></li>
-</ul>
+        <h2>题目信息</h2>
+        <p>待填写你的原题内容</p>
 
-<h2>一、题目分析</h2>
-<p>题目名为“瑞士军刀”，在网络安全领域通常指代 <strong>Netcat(nc)</strong> 工具。
-题目描述仅有一个 <code>ls</code>，提示我们需要连接靶机并执行系统命令。
-这是一道入门级 PWN 题，考察基础的 Linux 命令和 Netcat 工具使用。</p>
+        <h2>解题思路</h2>
+        <p>在这里粘贴你的PWN解题思路</p>
 
-<h2>二、解题过程与环境踩坑</h2>
+        <h2>详细解题过程</h2>
+        <h3>步骤1：本地分析二进制文件</h3>
+        <p>粘贴你的步骤文字</p>
 
-<h3>阶段1：Windows PowerShell直接尝试</h3>
-<p>首先在 Windows PowerShell 中直接使用 nc 连接靶机：</p>
-<pre>nc 160.202.254.160 14273</pre>
-<p>✅踩坑：Windows原生PowerShell没有nc命令，直接执行会提示不是内部命令。</p>
+        <div class="tip-box">
+            这里用来放提示、坑点、注意事项，和截图样式完全一致
+        </div>
 
-<h3>阶段2：切换WSL / Kali Linux环境</h3>
-<p>使用WSL或者Kali终端，系统自带netcat，执行连接命令：</p>
-<pre>nc 160.202.254.160 14273</pre>
-<p>成功连上远程靶机，拿到交互式shell。</p>
+        <h3>步骤2：漏洞定位</h3>
+        <p>粘贴内容</p>
 
-<h3>阶段3：执行Linux命令获取flag</h3>
-<ol>
-<li>输入 <code>ls</code> 查看当前目录文件，发现flag文件</li>
-<li>输入 <code>cat flag</code> 读取flag文件内容</li>
-<li>复制输出得到flag，提交平台完成解题</li>
-</ol>
+        <h3>步骤3：EXP编写与利用</h3>
+<pre>
+# 这里放exp代码
+from pwn import *
+</pre>
 
-<h2>三、踩坑总结</h2>
-<ul>
-<li>Windows默认不带netcat工具，不要在PowerShell直接跑nc，建议WSL/Kali。</li>
-<li>nc命令IP和端口<strong>空格分隔，不能写冒号</strong>。</li>
-<li>靶机场景存在存活时间，超时需要重新开启，IP端口会变化。</li>
-<li>文件名就叫flag，不要写cat flag.txt，会报文件不存在。</li>
-</ul>
+        <a href="./index.html" class="back-btn">← 返回首页</a>
 
-<h2>四、考点总结</h2>
-<ul>
-<li>Netcat(nc)网络工具基础使用，理解“网络瑞士军刀”含义</li>
-<li>基础Linux命令 ls、cat</li>
-<li>远程交互式shell基础操作</li>
-</ul>
-
+        <footer>
+            <span>© 2026 陆楷中</span>
+            <span>GitHub Pages</span>
+        </footer>
+    </div>
+</div>
 </body>
 </html>
-
