@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bugku - 把猪困在猪圈里 Writeup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #12141c;
+            color: #e2e8f0;
+            font-family: "Consolas", "Microsoft Yahei", monospace;
+            line-height: 1.7;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 32px 20px;
+        }
+        h1 {
+            color: #61dafb;
+            margin-bottom: 8px;
+            font-size: 28px;
+        }
+        .author {
+            color:#94a3b8;
+            margin-bottom:32px;
+        }
+        h2 {
+            color:#82caff;
+            margin:28px 0 12px;
+            font-size:20px;
+            border-left:4px solid #3b82f6;
+            padding-left:12px;
+        }
+        p {
+            margin-bottom:14px;
+        }
+        pre {
+            background:#1e2230;
+            padding:16px;
+            border-radius:8px;
+            overflow-x:auto;
+            border:1px solid #2d3446;
+            margin:16px 0;
+        }
+        code {
+            color:#79e2a3;
+            font-family:Consolas,monospace;
+        }
+        .flag-box {
+            background:#162b3c;
+            padding:14px;
+            border-radius:8px;
+            border:1px solid #2374ab;
+            margin:20px 0;
+        }
+        ul{
+            padding-left:22px;
+            margin-bottom:16px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Bugku CTF｜把猪困在猪圈里 Writeup</h1>
+    <div class="author">作者：陆楷中</div>
+
+    <h2>题目描述</h2>
+    <p>Crypto密码题，题目名字提示<strong>猪圈密码(Pigpen)</strong>，下载附件得到一段Base64字符串，Base64解码得到猪圈密码符号图片，解密得到flag。</p>
+
+    <h2>解题步骤</h2>
+    <p>1.点击下载附件，附件是txt文本，内容是JPG图片的Base64编码。</p>
+    <p>2.将Base64内容复制，使用在线工具Base64转图片，生成猪圈密码符号图片。</p>
+    <p>3.拿到符号，使用猪圈密码在线解密工具，对照密码表解密。</p>
+<pre><code>密文符号：〉∩┌⌐└∨┐┌⌐┐┘∨∨∨⌐∈⌐┘</code></pre>
+    <p>4.解密后明文：<code>thisispigpassword</code></p>
+
+    <h2>Flag</h2>
+    <div class="flag-box">
+        <code>flag{thisispigpassword}</code>
+    </div>
+
+    <h2>踩坑记录</h2>
+    <ul>
+        <li>不要直接对base64文本直接字符串解码，必须转成图片拿到猪圈密码符号；</li>
+        <li>严格注意flag格式，必须<strong>大括号{ }</strong>，禁止圆括号；</li>
+        <li>猪圈密码属于图形替代密码，依靠符号形状对应英文字母。</li>
+    </ul>
+
+</body>
+</html>
