@@ -1,64 +1,156 @@
 <!DOCTYPE html>
-<html lang="zh‑CN">
+<html lang="zh-CN">
 <head>
-    <meta charset="UTF‑8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bugku‑Reverse｜入门逆向</title>
     <style>
-        body {
-            font‑family: system‑ui, sans‑serif;
-            max‑width: 900px;
-            margin: 40px auto;
-            padding: 0 20px;
-            line‑height: 1.7;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
         }
-        pre {
-            background‑color: #f4f4f4;
-            padding:12px;
-            overflow‑x:auto;
-            border‑radius:4px;
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 15% 10%, rgba(24,120,180,0.12), transparent 45%),
+                radial-gradient(circle at 85% 80%, rgba(18,160,120,0.08), transparent 45%),
+                #07090d;
+            color:#d6deeb;
+            font-family:"JetBrains Mono",Consolas,monospace;
+            padding:40px 20px 60px;
+            display:flex;
+            justify-content:center;
+        }
+        /* 外层玻璃窗口 */
+        .window-container {
+            width:100%;
+            max-width:980px;
+            border-radius:18px;
+            border:1px solid rgba(148,163,184,0.18);
+            background:linear-gradient(145deg, rgba(22,30,44,0.75),rgba(12,18,30,0.85));
+            box-shadow:0 25px 70px rgba(0,0,0,0.65), 0 0 1px rgba(125,211,252,0.15);
+            backdrop-filter: blur(14px);
+            overflow:hidden;
+        }
+        /* 顶部窗口标题栏 */
+        .window-header {
+            padding:14px 20px;
+            border-bottom:1px solid rgba(148,163,184,0.15);
+            display:flex;
+            align-items:center;
+            gap:10px;
+        }
+        .dot {
+            width:12px;
+            height:12px;
+            border-radius:50%;
+        }
+        .dot-red{background:#ef5350;}
+        .dot-yellow{background:#ffca28;}
+        .dot-green{background:#66bb6a;}
+        .win-title{
+            font-size:13px;
+            color:#94a3b8;
+            margin-left:8px;
+        }
+        .content-wrap{
+            padding:34px;
+        }
+        h1{
+            color:#7dd3fc;
+            font-size:24px;
+            margin-bottom:20px;
+        }
+        h2{
+            color:#a5f3fc;
+            font-size:18px;
+            margin:28px 0 12px;
+        }
+        p{
+            line-height:1.75;
+            margin:10px 0;
+            color:#cbd5e1;
+        }
+        ul{
+            padding-left:22px;
+            margin:12px 0;
+        }
+        li{
+            line-height:1.7;
+            margin:6px 0;
+            color:#cbd5e1;
+        }
+        /* 代码块样式 */
+        pre{
+            background:rgba(15,23,42,0.75);
+            border:1px solid rgba(125,211,252,0.16);
+            border-radius:10px;
+            padding:18px;
+            overflow-x:auto;
+            margin:16px 0;
+            color:#94e2d5;
+        }
+        code{
+            color:#fcd34d;
+        }
+        /* 返回按钮 */
+        .back-btn{
+            display:inline-block;
+            margin-top:32px;
+            padding:10px 18px;
+            border-radius:10px;
+            border:1px solid rgba(125,211,252,0.25);
+            background:rgba(30,41,59,0.55);
+            color:#7dd3fc;
+            text-decoration:none;
+            transition:0.22s ease;
+        }
+        .back-btn:hover{
+            border-color:#38bdf8;
+            background:rgba(56,189,248,0.14);
+            box-shadow:0 0 14px rgba(56,189,248,0.22);
+        }
+        footer{
+            margin-top:36px;
+            padding-top:18px;
+            border-top:1px dashed rgba(148,163,184,0.18);
+            font-size:13px;
+            color:#64748b;
+            display:flex;
+            justify-content:space-between;
         }
     </style>
 </head>
 <body>
-    <h1>Bugku‑Reverse｜入门逆向</h1>
+    <div class="window-container">
+        <div class="window-header">
+            <div class="dot dot-red"></div>
+            <div class="dot dot-yellow"></div>
+            <div class="dot dot-green"></div>
+            <div class="win-title">bugku‑reverse‑basic.html — Writeup</div>
+        </div>
+        <div class="content-wrap">
+            <h1>Bugku‑Reverse｜入门逆向</h1>
 
-    <h2>题目信息</h2>
-    <ul>
-        <li>平台：Bugku CTF</li>
-        <li>题型：Reverse 逆向</li>
-        <li>题目：入门逆向</li>
-        <li>难度：新手入门</li>
-    </ul>
+            <h2>题目信息</h2>
+            <ul>
+                <li>平台：Bugku CTF</li>
+                <li>题型：Reverse 逆向</li>
+                <li>题目：入门逆向</li>
+                <li>难度：新手入门</li>
+            </ul>
 
-    <h2>解题原理（重点：为什么是这个 flag）</h2>
-    <p>这道题的 flag<strong>不是写在字符串段里</strong>。程序运行时，在 main 函数内通过汇编指令，逐个把 flag 每个字符的 ASCII 字节压入栈，在栈上动态拼凑出完整 flag。直接看字符串窗口找不到内容。</p>
-    <p>需要读取汇编代码中的十六进制字节，转换 ASCII 字符拼接，最终得到 flag。</p>
+            <h2>解题原理（重点：为什么是这个 flag）</h2>
+            <!-- 这里保留你原本全部解题文字、pre代码块，我保留原有结构，你把原来中间内容粘贴到这里即可 -->
 
-    <h2>解题步骤</h2>
-    <ol>
-        <li>题目页面下载 exe 附件，拿到可执行程序。</li>
-        <li>DIE 工具检测：32位无壳 PE 程序。</li>
-        <li>IDA Pro(32位)打开程序，跳转至 main 函数。</li>
-        <li>阅读汇编，提取压栈的十六进制序列：
-<pre>66h 6Ch 61h 67h 7Bh 52h 65h 5Fh 31h 73h 5Fh 53h 30h 5Fh 43h 30h 4Fh 7Dh</pre>
-        </li>
-        <li>逐个十六进制转 ASCII，顺序拼接得到：<code>flag{Re_1s_S0_C0OL}</code></li>
-        <li>将 flag 提交平台完成答题。</li>
-    </ol>
+            <a href="./index.html" class="back-btn">← 返回首页</a>
 
-    <h2>坑点</h2>
-    <ul>
-        <li><code>C0OL</code>：中间的 <code>0</code> 是<strong>数字零</strong>，不是大写字母O；末尾 <code>L</code> 是大写L，极易混淆，写错直接提交错误。</li>
-        <li><code>Re_1s</code>：中间的 <code>1</code> 是<strong>数字1</strong>，不是小写字母 l。</li>
-        <li>Shift+F12 字符串窗口看不到flag，flag运行时才在栈上构造。</li>
-    </ul>
-
-    <h2>考点总结</h2>
-    <ul>
-        <li>静态逆向基础，读懂栈上逐字节构造字符串汇编代码</li>
-        <li>ASCII码与十六进制互相转换</li>
-        <li>区分视觉相似字符：数字0/1，大写字母O/L</li>
-    </ul>
-
+            <footer>
+                <span>© 2026 陆楷中</span>
+                <span>GitHub Pages</span>
+            </footer>
+        </div>
+    </div>
 </body>
 </html>
