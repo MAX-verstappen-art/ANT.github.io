@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bugku Web｜矛盾 Writeup</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            min-height: 100vh;
+            background:
+                radial-gradient(circle at 20% 10%, rgba(56,189,248,0.08), transparent 45%),
+                radial-gradient(circle at 80% 85%, rgba(16,185,129,0.06), transparent 45%),
+                #07090d;
+            color: #cbd5e1;
+            font-family: "JetBrains Mono", Fira Code, Consolas, monospace;
+            padding:40px 20px 60px;
+            display:flex;
+            justify-content:center;
+        }
+        .container{
+            width:100%;
+            max-width:920px;
+        }
+        h1{
+            color:#7dd3fc;
+            font-size:24px;
+            margin-bottom:20px;
+        }
+        h2{
+            color:#a5f3fc;
+            font-size:18px;
+            margin:28px 0 10px;
+        }
+        .info-card{
+            background:rgba(15,23,42,0.55);
+            border:1px solid rgba(148,163,184,0.14);
+            border-radius:10px;
+            padding:16px 20px;
+        }
+        ul.info-list{
+            padding-left:22px;
+            line-height:1.75;
+        }
+        ol.steps{
+            padding-left:24px;
+            line-height:1.8;
+        }
+        p{
+            line-height:1.7;
+        }
+        code{
+            color:#fcd34d;
+            font-family:monospace;
+        }
+        pre{
+            background:#0f172a;
+            padding:14px;
+            border-radius:8px;
+            margin:10px 0;
+            overflow-x:auto;
+        }
+        .flag-block{
+            margin-top:14px;
+            background:rgba(30,41,59,0.6);
+            border-left:4px solid #4ade80;
+            padding:14px 18px;
+            border-radius:8px;
+        }
+        .flag-text{
+            color:#86efac;
+            font-family:monospace;
+        }
+        footer{
+            margin-top:42px;
+            font-size:13px;
+            color:#64748b;
+            border-top:1px solid rgba(148,163,184,0.12);
+            padding-top:16px;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>Bugku Web｜矛盾</h1>
+
+    <h2>题目信息</h2>
+    <div class="info-card">
+        <ul class="info-list">
+            <li>平台：Bugku CTF</li>
+            <li>类型：Web PHP弱类型</li>
+            <li>题目链接：http://160.202.254.160:19590</li>
+        </ul>
+    </div>
+
+    <h2>源码</h2>
+    <div class="info-card">
+<pre>$num=$_GET['num'];
+if(!is_numeric($num))
+{
+echo $num;
+if($num==1)
+echo 'flag{**********}';
+}</pre>
+    </div>
+
+    <h2>考点</h2>
+    <div class="info-card">
+        <p>PHP弱类型比较 <code>==</code>，<code>is_numeric()</code>函数绕过。</p>
+    </div>
+
+    <h2>解题思路</h2>
+    <div class="info-card">
+        <p>两个矛盾条件：
+        <br>1. <code>!is_numeric($num)</code>：传入参数不能是纯数字字符串
+        <br>2. <code>$num ==1</code>：弱比较等价等于数字1
+        <br>payload <code>?num=1a</code>，字符串<code>1a</code>不是纯数字，但是PHP做弱比较时，会提取开头数字1和数字1相等，两个条件同时满足。</p>
+    </div>
+
+    <h2>解题步骤</h2>
+    <div class="info-card">
+        <ol class="steps">
+            <li>访问题目原始链接</li>
+            <li>GET传参，构造payload：<code>?num=1a</code></li>
+            <li>完整URL：<code>http://160.202.254.160:19590/?num=1a</code></li>
+            <li>页面直接输出flag</li>
+        </ol>
+    </div>
+
+    <h2>Flag</h2>
+    <div class="flag-block">
+        <div class="flag-text">flag{30d508284a2f4499}</div>
+    </div>
+
+    <footer>© 2026 陆楷中 | GitHub Pages CTF Writeup</footer>
+</div>
+</body>
+</html>
