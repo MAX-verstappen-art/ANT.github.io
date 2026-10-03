@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bugku‑Misc‑眼见非实</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #12141d;
+            color: #e2e8f0;
+            font-family: "Consolas", "Microsoft Yahei", sans-serif;
+            line-height: 1.7;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .glass-card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: #73c0ff;
+            margin-bottom: 16px;
+            font-size:24px;
+        }
+        h2 {
+            color:#94bfff;
+            margin:20px 0 10px;
+            font-size:19px;
+        }
+        pre {
+            background:#1e2230;
+            padding:14px;
+            border-radius:8px;
+            overflow-x:auto;
+            border-left:3px solid #4299e1;
+            margin:12px 0;
+        }
+        code {
+            color:#89ddff;
+            font-family:Consolas;
+        }
+        .flag-text{
+            color:#4ade80;
+            font-weight:bold;
+        }
+        .back-home{
+            display:inline-block;
+            color:#60a5fa;
+            text-decoration:none;
+            margin-bottom:20px;
+        }
+        .back-home:hover{
+            text-decoration:underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="./index.html" class="back-home">← 返回首页</a>
+    <div class="glass-card">
+        <h1>Bugku‑Misc‑眼见非实</h1>
+        <h2>题目信息</h2>
+        <p>平台：Bugku CTF</p>
+        <p>分类：Misc 文件隐写</p>
+        <p>描述：flag{}</p>
+
+        <h2>考点</h2>
+        <p>docx文件本质为zip压缩包，文件头PK代表zip。修改后缀为zip解压，读取word/document.xml得到flag。</p>
+
+        <h2>解题步骤</h2>
+        <ol>
+            <li>下载附件docx文件</li>
+            <li>开启Windows「显示文件扩展名」，把后缀 <code>.docx</code> 修改为 <code>.zip</code></li>
+            <li>解压压缩包</li>
+            <li>打开 <code>word/document.xml</code>，Ctrl+F搜索flag关键字</li>
+        </ol>
+
+        <h2>关键文件路径</h2>
+<pre>word/document.xml
+</pre>
+
+        <h2>Flag</h2>
+        <p class="flag-text">flag{F1@g}</p>
+
+        <h2>踩坑记录</h2>
+        <ul>
+            <li>注意字符：大写F，数字1，@符号，不要写成小写L。</li>
+            <li>Windows必须打开显示扩展名，否则修改的只是文件名，后缀不变。</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
