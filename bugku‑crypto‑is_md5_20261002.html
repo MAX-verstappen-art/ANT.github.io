@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bugku‑Crypto‑你以为是md5吗</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            background-color: #12141d;
+            color: #e2e8f0;
+            font-family: "Consolas", "Microsoft Yahei", sans-serif;
+            line-height: 1.7;
+            padding: 2rem;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        .glass-card {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 14px;
+            padding: 28px;
+            margin-bottom: 24px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            color: #73c0ff;
+            margin-bottom: 16px;
+            font-size:24px;
+        }
+        h2 {
+            color:#94bfff;
+            margin:20px 0 10px;
+            font-size:19px;
+        }
+        pre {
+            background:#1e2230;
+            padding:14px;
+            border-radius:8px;
+            overflow-x:auto;
+            border-left:3px solid #4299e1;
+            margin:12px 0;
+        }
+        code {
+            color:#89ddff;
+            font-family:Consolas;
+        }
+        .flag-text{
+            color:#4ade80;
+            font-weight:bold;
+        }
+        .back-home{
+            display:inline-block;
+            color:#60a5fa;
+            text-decoration:none;
+            margin-bottom:20px;
+        }
+        .back-home:hover{
+            text-decoration:underline;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <a href="./index.html" class="back-home">← 返回首页</a>
+    <div class="glass-card">
+        <h1>Bugku‑Crypto‑你以为是md5吗</h1>
+        <h2>题目信息</h2>
+        <p>平台：Bugku CTF</p>
+        <p>分类：Crypto</p>
+        <p>提示：md5的构成</p>
+        <p>描述：flag{}</p>
+
+        <h2>考点</h2>
+        <p>MD5哈希字符集知识：md5结果仅由 <code>0‑9,a‑f</code> 16个字符组成。剔除字符串中非法字符得到真实md5，再进行md5解密。</p>
+
+        <h2>解题步骤</h2>
+        <ol>
+            <li>下载附件md5，得到密文：<code>bci177a7a9c7udf69c248647b4dfc6fd84o</code></li>
+            <li>MD5合法字符：0123456789abcdef，去掉非法字符 i、u、o</li>
+            <li>得到纯净md5：<code>bc177a7a9c7df69c248647b4dfc6fd84</code></li>
+            <li>使用在线md5解密网站解密，得到明文：666666666666</li>
+        </ol>
+
+        <h2>Python过滤脚本</h2>
+<pre>
+s = "bci177a7a9c7udf69c248647b4dfc6fd84o"
+md5_set = set("0123456789abcdef")
+res = [c for c in s if c in md5_set]
+print(''.join(res))
+</pre>
+
+        <h2>Flag</h2>
+        <p class="flag-text">flag{666666666666}</p>
+
+        <h2>踩坑记录</h2>
+        <ul>
+            <li>❌ 误区：提取非法字符作为flag。</li>
+            <li>✅ 正确：剔除非法字符，拿到真实md5，解密md5得到flag。</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
