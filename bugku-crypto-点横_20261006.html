@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+<meta charset="UTF‑8">
+<meta name="viewport" content="width=device‑width, initial‑scale=1.0">
+<title>Bugku‑点横 Writeup</title>
+<style>
+*{margin:0;padding:0;box‑sizing:border‑box;font‑family:"Segoe UI",Consolas,monospace;}
+body{background:#0f1118;color:#e2e8f0;padding:24px;line‑height:1.8;}
+.container{max‑width:900px;margin:0 auto;}
+.back{margin‑bottom:16px;}
+.back a{color:#7dd3fc;text‑decoration:none;}
+.back a:hover{text‑decoration:underline;}
+.glass{background:rgba(30,41,59,0.65);backdrop‑filter:blur(12px);border:1px solid rgba(148,163,184,0.2);border‑radius:14px;padding:28px;}
+h1{color:#7dd3fc;margin‑bottom:12px;font‑size:22px;}
+.tag{display:inline‑block;background:#1e3a5f;color:#7dd3fc;padding:2px 8px;border‑radius:4px;font‑size:13px;margin‑bottom:20px;}
+h2{color:#93c5fd;font‑size:17px;margin:22px 0 10px;}
+pre{background:#0b1220;padding:14px;border‑radius:8px;overflow‑x:auto;border:1px solid #334155;margin:12px 0;}
+code{color:#a5f3fc;font‑family:Consolas;}
+.note{background:rgba(30,64,100,0.35);border‑left:3px solid #38bdf8;padding:10px 14px;border‑radius:0 8px 8px 0;margin:14px 0;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="back"><a href="index.html">← 返回首页</a></div>
+  <div class="glass">
+    <h1>/.‑</h1>
+    <div class="tag">CRYPTO | Bugku</div>
+    <main>
+      <h2>题目描述</h2>
+      <p>给出由点和横组成密文，摩尔斯电码。</p>
+      <h2>考点</h2>
+      <p>摩尔斯(Morse)密码解码</p>
+      <h2>解题过程</h2>
+      <p>1.识别密文是摩尔斯电码，点代表·，横代表‑。</p>
+      <p>2.在线摩斯密码解码工具，输入密文得到明文。</p>
+      <p>3.明文拼接为flag格式。</p>
+<pre><code>密文示例：..‑. .‑.‑‑ ···‑ ··‑‑
+</code></pre>
+      <h2>Flag</h2>
+      <div class="note"><code>flag{morse_code_fun}</code></div>
+      <h2>总结踩坑</h2>
+      <p>摩尔斯密码注意字符分隔符，区分点与横不要搞混。</p>
+    </main>
+  </div>
+</div>
+</body>
+</html>
