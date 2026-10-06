@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+<meta charset="UTF‑8">
+<meta name="viewport" content="width=device‑width, initial‑scale=1.0">
+<title>Bugku‑你必须让他停下 Writeup</title>
+<style>
+*{margin:0;padding:0;box‑sizing:border‑box;font‑family:"Segoe UI",Consolas,monospace;}
+body{background:#0f1118;color:#e2e8f0;padding:24px;line‑height:1.8;}
+.container{max‑width:900px;margin:0 auto;}
+.back{margin‑bottom:16px;}
+.back a{color:#7dd3fc;text‑decoration:none;}
+.back a:hover{text‑decoration:underline;}
+.glass{background:rgba(30,41,59,0.65);backdrop‑filter:blur(12px);border:1px solid rgba(148,163,184,0.2);border‑radius:14px;padding:28px;}
+h1{color:#7dd3fc;margin‑bottom:12px;font‑size:22px;}
+.tag{display:inline‑block;background:#1e3a5f;color:#7dd3fc;padding:2px 8px;border‑radius:4px;font‑size:13px;margin‑bottom:20px;}
+h2{color:#93c5fd;font‑size:17px;margin:22px 0 10px;}
+pre{background:#0b1220;padding:14px;border‑radius:8px;overflow‑x:auto;border:1px solid #334155;margin:12px 0;}
+code{color:#a5f3fc;font‑family:Consolas;}
+.note{background:rgba(30,64,100,0.35);border‑left:3px solid #38bdf8;padding:10px 14px;border‑radius:0 8px 8px 0;margin:14px 0;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="back"><a href="index.html">← 返回首页</a></div>
+  <div class="glass">
+    <h1>你必须让他停下</h1>
+    <div class="tag">WEB | Bugku</div>
+    <main>
+      <h2>题目描述</h2>
+      <p>页面会自动不断跳转，肉眼来不及读取内容，需要终止页面跳转拿到flag。</p>
+      <h2>考点</h2>
+      <p>页面自动刷新/跳转，抓包，浏览器停止加载</p>
+      <h2>解题过程</h2>
+      <p>方法1：打开页面瞬间立刻按下浏览器<code>ESC</code>按键，终止页面加载与跳转，页面停止刷新后直接看到flag。</p>
+      <p>方法2：Burp抓包，拦截服务器返回的响应，直接查看响应包内容，不需要等待页面渲染。</p>
+      <p>方法3：F12开发者工具，Network面板勾选禁用页面跳转，阻止js自动重定向。</p>
+<pre><code># 页面存在自动跳转逻辑
+window.location.href = "xxx";
+</code></pre>
+      <h2>Flag</h2>
+      <div class="note"><code>flag{stop_it_stop_it}</code></div>
+      <h2>总结踩坑</h2>
+      <p>页面不停跳转不要手动抢看屏幕，ESC停止加载或者抓包看响应是更稳定的方案。</p>
+    </main>
+  </div>
+</div>
+</body>
+</html>
