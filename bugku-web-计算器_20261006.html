@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+<meta charset="UTF‑8">
+<meta name="viewport" content="width=device‑width, initial‑scale=1.0">
+<title>Bugku‑计算器 Writeup</title>
+<style>
+*{margin:0;padding:0;box‑sizing:border‑box;font‑family:"Segoe UI",Consolas,monospace;}
+body{background:#0f1118;color:#e2e8f0;padding:24px;line‑height:1.8;}
+.container{max‑width:900px;margin:0 auto;}
+.back{margin‑bottom:16px;}
+.back a{color:#7dd3fc;text‑decoration:none;}
+.back a:hover{text‑decoration:underline;}
+.glass{background:rgba(30,41,59,0.65);backdrop‑filter:blur(12px);border:1px solid rgba(148,163,184,0.2);border‑radius:14px;padding:28px;}
+h1{color:#7dd3fc;margin‑bottom:12px;font‑size:22px;}
+.tag{display:inline‑block;background:#1e3a5f;color:#7dd3fc;padding:2px 8px;border‑radius:4px;font‑size:13px;margin‑bottom:20px;}
+h2{color:#93c5fd;font‑size:17px;margin:22px 0 10px;}
+pre{background:#0b1220;padding:14px;border‑radius:8px;overflow‑x:auto;border:1px solid #334155;margin:12px 0;}
+code{color:#a5f3fc;font‑family:Consolas;}
+.note{background:rgba(30,64,100,0.35);border‑left:3px solid #38bdf8;padding:10px 14px;border‑radius:0 8px 8px 0;margin:14px 0;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="back"><a href="index.html">← 返回首页</a></div>
+  <div class="glass">
+    <h1>计算器</h1>
+    <div class="tag">WEB | Bugku</div>
+    <main>
+      <h2>题目描述</h2>
+      <p>网页计算器，会给出运算表达式，需要提交正确运算结果，前端做了JS限制，不能输入数字以外字符。</p>
+      <h2>考点</h2>
+      <p>前端JS限制绕过，Burp抓包修改请求数据。</p>
+      <h2>解题过程</h2>
+      <p>1.页面上有JS校验，输入框只能输入数字，无法直接输入答案。</p>
+      <p>2.开启BurpSuite代理，在页面提交的时候抓取POST数据包。</p>
+      <p>3.修改数据包内提交的值为表达式计算出的正确结果，直接放行数据包，后端校验通过返回flag。</p>
+      <h2>Flag</h2>
+      <div class="note"><code>flag{calculator_1s_easy}</code></div>
+      <h2>总结踩坑</h2>
+      <p>前端的所有校验都可以绕过，不要相信前端限制，所有安全逻辑必须放在后端。只修改页面JS也可以完成绕过。</p>
+    </main>
+  </div>
+</div>
+</body>
+</html>
