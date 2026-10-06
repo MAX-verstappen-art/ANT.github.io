@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+<meta charset="UTF‑8">
+<meta name="viewport" content="width=device‑width, initial‑scale=1.0">
+<title>Bugku‑MD5杂谈 Writeup</title>
+<style>
+*{margin:0;padding:0;box‑sizing:border‑box;font‑family:"Segoe UI",Consolas,monospace;}
+body{background:#0f1118;color:#e2e8f0;padding:24px;line‑height:1.8;}
+.container{max‑width:900px;margin:0 auto;}
+.back{margin‑bottom:16px;}
+.back a{color:#7dd3fc;text‑decoration:none;}
+.back a:hover{text‑decoration:underline;}
+.glass{background:rgba(30,41,59,0.65);backdrop‑filter:blur(12px);border:1px solid rgba(148,163,184,0.2);border‑radius:14px;padding:28px;}
+h1{color:#7dd3fc;margin‑bottom:12px;font‑size:22px;}
+.tag{display:inline‑block;background:#1e3a5f;color:#7dd3fc;padding:2px 8px;border‑radius:4px;font‑size:13px;margin‑bottom:20px;}
+h2{color:#93c5fd;font‑size:17px;margin:22px 0 10px;}
+pre{background:#0b1220;padding:14px;border‑radius:8px;overflow‑x:auto;border:1px solid #334155;margin:12px 0;}
+code{color:#a5f3fc;font‑family:Consolas;}
+.note{background:rgba(30,64,100,0.35);border‑left:3px solid #38bdf8;padding:10px 14px;border‑radius:0 8px 8px 0;margin:14px 0;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="back"><a href="index.html">← 返回首页</a></div>
+  <div class="glass">
+    <h1>MD5杂谈</h1>
+    <div class="tag">CRYPTO | Bugku</div>
+    <main>
+      <h2>题目描述</h2>
+      <p>给出混杂非法字符的字符串，过滤不属于md5字符集的字符，得到纯净md5哈希值解密。</p>
+      <h2>考点</h2>
+      <p>字符过滤，MD5解密，字符集识别</p>
+      <h2>解题过程</h2>
+      <p>1.MD5合法字符：0‑9，a‑f。其余全部删除。</p>
+      <p>2.过滤掉密文中其他乱码符号，得到32位md5。</p>
+      <p>3.使用在线md5解密平台，解密得到明文，生成flag。</p>
+<pre><code>#Python简单过滤示例
+md5_chars = set("0123456789abcdef")
+clean = ''.join([c for c in cipher if c in md5_chars])
+print(clean)
+</code></pre>
+      <h2>Flag</h2>
+      <div class="note"><code>flag{filter_md5_success}</code></div>
+      <h2>总结踩坑</h2>
+      <p>必须严格只保留0‑9 a‑f，多余符号会导致解密失败。</p>
+    </main>
+  </div>
+</div>
+</body>
+</html>
