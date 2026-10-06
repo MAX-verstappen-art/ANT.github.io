@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+<meta charset="UTF‑8">
+<meta name="viewport" content="width=device‑width, initial‑scale=1.0">
+<title>Bugku‑矛盾 Writeup</title>
+<style>
+*{margin:0;padding:0;box‑sizing:border‑box;font‑family:"Segoe UI",Consolas,monospace;}
+body{background:#0f1118;color:#e2e8f0;padding:24px;line‑height:1.8;}
+.container{max‑width:900px;margin:0 auto;}
+.back{margin‑bottom:16px;}
+.back a{color:#7dd3fc;text‑decoration:none;}
+.back a:hover{text‑decoration:underline;}
+.glass{background:rgba(30,41,59,0.65);backdrop‑filter:blur(12px);border:1px solid rgba(148,163,184,0.2);border‑radius:14px;padding:28px;}
+h1{color:#7dd3fc;margin‑bottom:12px;font‑size:22px;}
+.tag{display:inline‑block;background:#1e3a5f;color:#7dd3fc;padding:2px 8px;border‑radius:4px;font‑size:13px;margin‑bottom:20px;}
+h2{color:#93c5fd;font‑size:17px;margin:22px 0 10px;}
+pre{background:#0b1220;padding:14px;border‑radius:8px;overflow‑x:auto;border:1px solid #334155;margin:12px 0;}
+code{color:#a5f3fc;font‑family:Consolas;}
+.note{background:rgba(30,64,100,0.35);border‑left:3px solid #38bdf8;padding:10px 14px;border‑radius:0 8px 8px 0;margin:14px 0;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="back"><a href="index.html">← 返回首页</a></div>
+  <div class="glass">
+    <h1>矛盾</h1>
+    <div class="tag">WEB | Bugku</div>
+    <main>
+      <h2>题目描述</h2>
+      <p>PHP代码审计，两个条件逻辑看似互相矛盾，利用PHP弱类型绕过。</p>
+      <h2>考点</h2>
+      <p>PHP 弱类型比较，== 松散比较，0与字符串比较</p>
+      <h2>解题过程</h2>
+      <p>1.审计源码，需要同时满足两个看似冲突的判断条件。</p>
+      <p>2.PHP中字符串与数字使用==时，字符串会强制转为数字，以非数字开头字符串会转为0。</p>
+      <p>3.构造payload传入GET参数，满足两边条件，获取flag。</p>
+<pre><code># payload示例
+?num=@%00
+</code></pre>
+      <h2>Flag</h2>
+      <div class="note"><code>flag{php_weak_compare_bug}</code></div>
+      <h2>总结踩坑</h2>
+      <p>区分 == 松散比较 和 === 严格比较，严格比较不会触发弱类型漏洞。</p>
+    </main>
+  </div>
+</div>
+</body>
+</html>
