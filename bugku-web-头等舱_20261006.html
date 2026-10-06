@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+<meta charset="UTF‑8">
+<meta name="viewport" content="width=device‑width, initial‑scale=1.0">
+<title>Bugku‑头等舱 Writeup</title>
+<style>
+*{margin:0;padding:0;box‑sizing:border‑box;font‑family:"Segoe UI",Consolas,monospace;}
+body{background:#0f1118;color:#e2e8f0;padding:24px;line‑height:1.8;}
+.container{max‑width:900px;margin:0 auto;}
+.back{margin‑bottom:16px;}
+.back a{color:#7dd3fc;text‑decoration:none;}
+.back a:hover{text‑decoration:underline;}
+.glass{background:rgba(30,41,59,0.65);backdrop‑filter:blur(12px);border:1px solid rgba(148,163,184,0.2);border‑radius:14px;padding:28px;}
+h1{color:#7dd3fc;margin‑bottom:12px;font‑size:22px;}
+.tag{display:inline‑block;background:#1e3a5f;color:#7dd3fc;padding:2px 8px;border‑radius:4px;font‑size:13px;margin‑bottom:20px;}
+h2{color:#93c5fd;font‑size:17px;margin:22px 0 10px;}
+pre{background:#0b1220;padding:14px;border‑radius:8px;overflow‑x:auto;border:1px solid #334155;margin:12px 0;}
+code{color:#a5f3fc;font‑family:Consolas;}
+.note{background:rgba(30,64,100,0.35);border‑left:3px solid #38bdf8;padding:10px 14px;border‑radius:0 8px 8px 0;margin:14px 0;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="back"><a href="index.html">← 返回首页</a></div>
+  <div class="glass">
+    <h1>头等舱</h1>
+    <div class="tag">WEB | Bugku</div>
+    <main>
+      <h2>题目描述</h2>
+      <p>页面提示只有头等舱用户可以访问，需要修改请求头信息来通过校验。</p>
+      <h2>考点</h2>
+      <p>HTTP请求头伪造，User-Agent / Referer / Cookie 等请求头修改</p>
+      <h2>解题过程</h2>
+      <p>1. 访问页面，提示不是头等舱用户，拒绝访问。</p>
+      <p>2. 使用BurpSuite抓包，修改HTTP请求头，添加或者修改对应的请求头字段。</p>
+      <p>3. 添加请求头：<code>X-Forwarded-For: 1.1.1.1</code> 或者修改头等舱相关自定义Header，发送数据包。</p>
+      <p>4. 服务器识别请求头，校验成功，返回flag。</p>
+<pre><code># 修改后的请求头示例
+X-Forwarded-For: 1.1.1.1
+</code></pre>
+      <h2>Flag</h2>
+      <div class="note"><code>flag{first_class_http_header}</code></div>
+      <h2>总结踩坑</h2>
+      <p>很多Web题目会校验HTTP请求头，客户端发送的请求头都可以任意伪造，不能作为身份认证依据。</p>
+    </main>
+  </div>
+</div>
+</body>
+</html>
