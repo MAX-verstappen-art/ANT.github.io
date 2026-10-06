@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+<meta charset="UTF‑8">
+<meta name="viewport" content="width=device‑width, initial‑scale=1.0">
+<title>Bugku‑富强民主 Writeup</title>
+<style>
+*{margin:0;padding:0;box‑sizing:border‑box;font‑family:"Segoe UI",Consolas,monospace;}
+body{background:#0f1118;color:#e2e8f0;padding:24px;line‑height:1.8;}
+.container{max‑width:900px;margin:0 auto;}
+.back{margin‑bottom:16px;}
+.back a{color:#7dd3fc;text‑decoration:none;}
+.back a:hover{text‑decoration:underline;}
+.glass{background:rgba(30,41,59,0.65);backdrop‑filter:blur(12px);border:1px solid rgba(148,163,184,0.2);border‑radius:14px;padding:28px;}
+h1{color:#7dd3fc;margin‑bottom:12px;font‑size:22px;}
+.tag{display:inline‑block;background:#1e3a5f;color:#7dd3fc;padding:2px 8px;border‑radius:4px;font‑size:13px;margin‑bottom:20px;}
+h2{color:#93c5fd;font‑size:17px;margin:22px 0 10px;}
+pre{background:#0b1220;padding:14px;border‑radius:8px;overflow‑x:auto;border:1px solid #334155;margin:12px 0;}
+code{color:#a5f3fc;font‑family:Consolas;}
+.note{background:rgba(30,64,100,0.35);border‑left:3px solid #38bdf8;padding:10px 14px;border‑radius:0 8px 8px 0;margin:14px 0;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="back"><a href="index.html">← 返回首页</a></div>
+  <div class="glass">
+    <h1>富强民主</h1>
+    <div class="tag">MISC | Bugku</div>
+    <main>
+      <h2>题目描述</h2>
+      <p>给出一串由社会主义核心价值观24个词语组成的密文，需要使用价值观编码解密。</p>
+      <p>密文：公正公正公正诚信文明公正民主公正法治法治友善平等和谐敬业和谐富强和谐富强和谐文明和谐平等 公正公正和谐法治公正公正公正文明和谐民主和谐敬业和谐平等和谐敬业和谐敬业和谐和谐和谐公正法治友善法治</p>
+      <h2>考点</h2>
+      <p>社会主义核心价值观编码，词语映射字符的替换密码</p>
+      <h2>解题过程</h2>
+      <p>1. 加密规则：24个核心价值观词语分别映射十六进制字符 0~f。</p>
+<pre><code>富强:0 民主:1 文明:2 和谐:3
+自由:4 平等:5 公正:6 法治:7
+爱国:8 敬业:9 诚信文明:c 诚信民主:b
+诚信自由:e 诚信平等:f 友善平等:b
+</code></pre>
+      <p>2. 将密文中每一个词语逐个替换为对应的十六进制字符，拼接得到hex字符串。</p>
+      <p>3. 直接使用在线【社会主义核心价值观编码工具】粘贴密文一键解密，得到flag。</p>
+      <h2>Flag</h2>
+      <div class="note"><code>flag{90025f7fb1959936}</code></div>
+      <h2>总结踩坑</h2>
+      <p>注意部分是两个词语组合映射一个字符，不能单独拆分。这是Bugku经典的misc趣味编码题。</p>
+    </main>
+  </div>
+</div>
+</body>
+</html>
