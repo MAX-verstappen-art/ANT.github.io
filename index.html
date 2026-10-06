@@ -1,295 +1,88 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh‑CN">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>CTF Writeup Archive | Bugku Solution Collection</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            min-height: 100vh;
-            background:
-                radial-gradient(circle at 20% 10%, rgba(56, 189, 248, 0.10), transparent 45%),
-                radial-gradient(circle at 80% 90%, rgba(16, 185, 129, 0.07), transparent 45%),
-                #07090d;
-            color: #d6deeb;
-            font-family: "JetBrains Mono", "Fira Code", Consolas, "Microsoft YaHei", monospace;
-            /* 顶部留出固定栏的高度 */
-            padding: 76px 20px 60px;
-            display: flex;
-            justify-content: center;
-            transition: background 0.3s ease;
-        }
-        body.dark-mode-2 {
-            background: #020305;
-            color: #b8c2cc;
-        }
-
-        /* ===== 固定悬浮的窗口栏（始终跟随页面） ===== */
-        .window-bar {
-            position: fixed;
-            top: 16px;
-            left: 50%;
-            transform: translateX(-50%);
-            width: min(860px, calc(100% - 40px));
-            z-index: 999;
-            padding: 12px 18px;
-            border-radius: 12px;
-            border: 1px solid rgba(148, 163, 184, 0.25);
-            background: linear-gradient(145deg, rgba(22, 30, 44, 0.92), rgba(12, 18, 30, 0.95));
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.55);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .glass-shell {
-            width: 100%;
-            max-width: 860px;
-            border-radius: 18px;
-            border: 1px solid rgba(148, 163, 184, 0.20);
-            background: linear-gradient(145deg, rgba(22, 30, 44, 0.78), rgba(12, 18, 30, 0.90));
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(14px);
-            -webkit-backdrop-filter: blur(14px);
-            overflow: hidden;
-            transition: background 0.3s ease;
-        }
-        body.dark-mode-2 .glass-shell {
-            background: linear-gradient(145deg, rgba(14, 19, 28, 0.85), rgba(6, 9, 15, 0.95));
-        }
-
-        /* ===== 三个圆点 ===== */
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-        }
-        .dot:hover {
-            transform: scale(1.4);
-            filter: brightness(1.25);
-        }
-        .dot:active {
-            transform: scale(0.9);
-        }
-        .dot-red {
-            background: linear-gradient(145deg, #ff6058, #d9443c);
-        }
-        .dot-red:hover {
-            box-shadow: 0 0 12px rgba(255, 96, 88, 0.7);
-        }
-        .dot-yellow {
-            background: linear-gradient(145deg, #ffd166, #e0b143);
-        }
-        .dot-yellow:hover {
-            box-shadow: 0 0 12px rgba(255, 209, 102, 0.7);
-        }
-        .dot-green {
-            background: linear-gradient(145deg, #69db7c, #3fa358);
-        }
-        .dot-green:hover {
-            box-shadow: 0 0 12px rgba(105, 219, 124, 0.7);
-        }
-
-        .window-title {
-            margin-left: 8px;
-            font-size: 13px;
-            color: #94a3b8;
-        }
-
-        .glass-inner {
-            padding: 34px 36px;
-        }
-
-        .author {
-            font-size: 22px;
-            font-weight: 700;
-            color: #7dd3fc;
-            margin-bottom: 6px;
-        }
-
-        .subtitle {
-            font-size: 14px;
-            color: #8aa0b7;
-            margin-bottom: 28px;
-        }
-        .subtitle span { color: #4ade80; }
-
-        ul { list-style: none; }
-        li { margin: 10px 0; }
-
-        a {
-            display: block;
-            padding: 12px 16px;
-            font-size: 14px;
-            color: #cfd8e3;
-            text-decoration: none;
-            border-radius: 10px;
-            border: 1px solid rgba(148, 163, 184, 0.18);
-            background: rgba(30, 41, 59, 0.45);
-            transition: all 0.18s ease;
-        }
-        a:hover {
-            border-color: rgba(125, 211, 252, 0.5);
-            background: rgba(56, 189, 248, 0.12);
-            color: #e0f2fe;
-            transform: translateX(4px);
-        }
-        a:active { transform: scale(0.98); }
-
-        /* 分页按钮 */
-        .page-box {
-            margin-top: 28px;
-            padding-top: 20px;
-            border-top: 1px dashed rgba(148, 163, 184, 0.18);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 14px;
-        }
-        .page-btn {
-            padding: 8px 18px;
-            border-radius: 8px;
-            border: 1px solid rgba(148, 163, 184, 0.3);
-            background: rgba(30, 41, 59, 0.6);
-            color: #7dd3fc;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 14px;
-            transition: all 0.18s ease;
-        }
-        .page-btn:hover:not(:disabled) {
-            background: rgba(56, 189, 248, 0.15);
-            border-color: rgba(125, 211, 252, 0.5);
-        }
-        .page-btn:disabled {
-            opacity: 0.35;
-            cursor: not-allowed;
-        }
-        .page-info {
-            color: #8aa0b7;
-            font-size: 14px;
-        }
-
-        footer {
-            margin-top: 30px;
-            padding-top: 18px;
-            border-top: 1px dashed rgba(148, 163, 184, 0.18);
-            font-size: 13px;
-            color: #7990a8;
-            display: flex;
-            justify-content: space-between;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        footer .tag { color: #4ade80; }
-    </style>
+<meta charset="UTF‑8">
+<meta name="viewport" content="width=device‑width, initial‑scale=1.0">
+<title>Bugku CTF Writeup Index</title>
+<style>
+*{margin:0;padding:0;box‑sizing:border‑box;font‑family:"Segoe UI",Consolas,monospace;}
+body{background:#0f1118;color:#e2e8f0;padding:24px;line‑height:1.7;}
+.container{max‑width:960px;margin:0 auto;}
+h1{text‑align:center;margin‑bottom:32px;color:#7dd3fc;}
+.glass{background:rgba(30,41,59,0.65);backdrop‑filter:blur(12px);border:1px solid rgba(148,163,184,0.2);border‑radius:14px;padding:24px;}
+ul{list‑style:none;}
+.item{padding:10px 14px;border‑bottom:1px solid rgba(148,163,184,0.12);transition:0.25s;}
+.item:hover{background:rgba(51,65,85,0.4);padding‑left:18px;}
+a{color:#7dd3fc;text‑decoration:none;}
+a:hover{color:#38bdf8;text‑decoration:underline;}
+.pagination{margin‑top:24px;text‑align:center;}
+.pagination button{background:#1e293b;color:#fff;border:1px solid #475569;padding:6px 12px;margin:0 3px;border‑radius:6px;cursor:pointer;}
+.pagination button.active{background:#2563eb;border‑color:#2563eb;}
+</style>
 </head>
 <body>
-    <!-- 固定悬浮的窗口栏 -->
-    <div class="window-bar">
-        <div class="dot dot-red" onclick="alert('CTF Writeup Archive\n作者：陆楷中\n仓库：GitHub Pages')" title="关于"></div>
-        <div class="dot dot-yellow" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="回到顶部"></div>
-        <div class="dot dot-green" onclick="document.body.classList.toggle('dark-mode-2')" title="切换深色主题"></div>
-        <div class="window-title">index.html — CTF Writeup Archive</div>
-    </div>
-
-    <div class="glass-shell">
-        <div class="glass-inner">
-            <div class="author">陆楷中</div>
-            <div class="subtitle">// CTF Writeup Archive | <span>Bugku Solution Collection</span></div>
-
-            <ul id="writeup-list">
-                <li><a href="./1.html">点击查看我的第一个帖子</a></li>
-                <li><a href="./calc.html">2026-09-24 Bugku Web - 计算器</a></li>
-                <li><a href="./alert.html">Bugku alert Writeup</a></li>
-                <li><a href="./phpget.html">Bugku PHP GET传参 Writeup</a></li>
-                <li><a href="./first-class.html">Bugku 头等舱 Writeup</a></li>
-                <li><a href="./bugku-web-ni-bi-xu-rang-ta-ting-xia.html">Bugku Web - 你必须让他停下</a></li>
-                <li><a href="./bugku-source.html">Bugku-source</a></li>
-                <li><a href="./bugku-misc-simple-image.html">Bugku MISC - 单纯的图片</a></li>
-                <li><a href="./bugku-crypto-smart-sheep.html">Bugku Crypto - 聪明的小羊</a></li>
-                <li><a href="./bugku-reverse-basic.html">Bugku Reverse - 入门逆向</a></li>
-                <li><a href="./bugku-pwn-swiss-army.html">Bugku PWN - 瑞士军刀 Writeup</a></li>
-                <li><a href="./bugku-crypto-morse.html">Bugku Crypto - 摩斯密码</a></li>
-                <li><a href="./bugku-crypto-ook.html">2026-09-24 Bugku Crypto - Ook(Ook!编码)</a></li>
-                <li><a href="./bugku-crypto-brainfuck.html">Bugku Crypto - [+-] Brainfuck</a></li>
-                <li><a href="./bugku-misc-fqmqz.html">Bugku-Misc | 富强民主</a></li>
-                <li><a href="./bugku-crypto-miwen.html">2026-09-24 Bugku Crypto - 散乱的密文</a></li>
-                <li><a href="./bugku-crypto-not-md5.html">2026-09-24 Bugku Crypto - 这不是md5</a></li>
-                <li><a href="./bugku-crypto-base91.html">2026-09-25 Bugku Crypto - 贝斯家族(Base91)</a></li>
-                <li><a href="./bugku-web-maodun.html">2026-09-26 Bugku Web - 矛盾(PHP弱类型)</a></li>
-                <li><a href="./bugku_pigpen.html">2026-09-26 Bugku Crypto - 把猪困在猪圈里</a></li>
-                <li><a href="bugku-crypto-zodiac-12palace.html">[Crypto] 黄道十二官｜2026‑09‑26</a></li>
-                <li><a href="bugku-web-backup-goodhabit.html">[Web] 备份是个好习惯｜2026‑09‑26</a></li>
-                <li><a href="bugku-crypto-copy-error_20261002.html">[2026‑10‑02] Bugku‑Crypto‑抄错的字符</a></li>
-                <li><a href="./bugku-misc-yinxie_20261002.html">[2026‑10‑02] Bugku‑Misc‑隐写</a></li>
-                <li><a href="./bugku-misc-telnet_20261002.html">[2026‑10‑02] Bugku‑Misc‑telnet</a></li>
-                <li><a href="./bugku-misc-eyes_20261002.html">[2026‑10‑03] Bugku‑Misc‑眼见非实</a></li>
-                <li><a href="./bugku‑crypto‑is_md5_20261002.html">[2026‑10‑02] Bugku‑Crypto‑你以为是md5吗</a></li>
-            </ul>
-
-            <div class="page-box">
-                <button class="page-btn" id="btn-prev">上一页</button>
-                <span class="page-info" id="page-info"></span>
-                <button class="page-btn" id="btn-next">下一页</button>
-            </div>
-
-            <footer>
-                <span>© 2026 陆楷中</span>
-                <span class="tag">GitHub Pages</span>
-            </footer>
-        </div>
-    </div>
-
-    <script>
-        const ITEM_PER_PAGE = 15;
-        let currentPage = 1;
-
-        const listDom = document.getElementById('writeup-list');
-        const allItems = Array.from(listDom.querySelectorAll('li'));
-        const btnPrev = document.getElementById('btn-prev');
-        const btnNext = document.getElementById('btn-next');
-        const pageInfo = document.getElementById('page-info');
-
-        const totalPages = Math.ceil(allItems.length / ITEM_PER_PAGE);
-
-        function renderPage(page) {
-            allItems.forEach(li => li.style.display = 'none');
-            const start = (page - 1) * ITEM_PER_PAGE;
-            const end = start + ITEM_PER_PAGE;
-            for (let i = start; i < end && i < allItems.length; i++) {
-                allItems[i].style.display = 'list-item';
-            }
-            pageInfo.innerText = `第 ${page} / ${totalPages} 页`;
-            btnPrev.disabled = (page <= 1);
-            btnNext.disabled = (page >= totalPages);
-        }
-
-        btnPrev.onclick = () => {
-            if (currentPage > 1) {
-                currentPage--;
-                renderPage(currentPage);
-            }
-        };
-
-        btnNext.onclick = () => {
-            if (currentPage < totalPages) {
-                currentPage++;
-                renderPage(currentPage);
-            }
-        };
-
-        renderPage(currentPage);
-    </script>
+<div class="container">
+  <h1>Bugku CTF Writeup</h1>
+  <div class="glass">
+    <ul id="list">
+<li class="item"><a href="bugku-misc-签到题_20261006.html">[MISC] 签到题</a></li>
+<li class="item"><a href="bugku-web-滑稽_20261006.html">[WEB] 滑稽</a></li>
+<li class="item"><a href="bugku-web-计算器_20261006.html">[WEB] 计算器</a></li>
+<li class="item"><a href="bugku-web-alert_20261006.html">[WEB] alert</a></li>
+<li class="item"><a href="bugku-web-你必须让他停下_20261006.html">[WEB] 你必须让他停下</a></li>
+<li class="item"><a href="bugku-web-头等舱_20261006.html">[WEB] 头等舱</a></li>
+<li class="item"><a href="bugku-web-get_20261006.html">[WEB] GET</a></li>
+<li class="item"><a href="bugku-web-post_20261006.html">[WEB] POST</a></li>
+<li class="item"><a href="bugku-web-source_20261006.html">[WEB] source</a></li>
+<li class="item"><a href="bugku-pwn-瑞士军刀_20261006.html">[PWN] 瑞士军刀</a></li>
+<li class="item"><a href="bugku-misc-这是一张单纯的图片_20261006.html">[MISC] 这是一张单纯的图片</a></li>
+<li class="item"><a href="bugku-crypto-点横_20261006.html">[CRYPTO] /.−</a></li>
+<li class="item"><a href="bugku-crypto-聪明的小羊_20261006.html">[CRYPTO] 聪明的小羊</a></li>
+<li class="item"><a href="bugku-crypto-ok_20261006.html">[CRYPTO] ok</a></li>
+<li class="item"><a href="bugku-crypto-加减箭头_20261006.html">[CRYPTO] [+-<->]</a></li>
+<li class="item"><a href="bugku-reverse-入门逆向_20261006.html">[REVERSE] 入门逆向</a></li>
+<li class="item"><a href="bugku-misc-linux_20261006.html">[MISC] linux</a></li>
+<li class="item"><a href="bugku-misc-富强民主_20261006.html">[MISC] 富强民主</a></li>
+<li class="item"><a href="bugku-crypto-散乱的密文_20261006.html">[CRYPTO] 散乱的密文</a></li>
+<li class="item"><a href="bugku-crypto-点问号感叹号_20261006.html">[CRYPTO] .!?</a></li>
+<li class="item"><a href="bugku-crypto-这不是md5_20261006.html">[CRYPTO] 这不是md5</a></li>
+<li class="item"><a href="bugku-crypto-贝斯家族_20261006.html">[CRYPTO] 贝斯家族</a></li>
+<li class="item"><a href="bugku-web-矛盾_20261006.html">[WEB] 矛盾</a></li>
+<li class="item"><a href="bugku-crypto-把猪困在猪圈里_20261006.html">[CRYPTO] 把猪困在猪圈里</a></li>
+<li class="item"><a href="bugku-crypto-黄道十二宫_20261006.html">[CRYPTO] 黄道十二宫</a></li>
+<li class="item"><a href="bugku-web-备份是个好习惯_20261006.html">[WEB] 备份是个好习惯</a></li>
+<li class="item"><a href="bugku-crypto-抄错的字符_20261006.html">[CRYPTO] 抄错的字符</a></li>
+<li class="item"><a href="bugku-misc-隐写_20261006.html">[MISC] 隐写</a></li>
+<li class="item"><a href="bugku-misc-telnet_20261006.html">[MISC] telnet</a></li>
+<li class="item"><a href="bugku-misc-眼见非实_20261006.html">[MISC] 眼见非实</a></li>
+<li class="item"><a href="bugku-crypto-你以为是md5吗_20261006.html">[CRYPTO] 你以为是md5吗</a></li>
+<li class="item"><a href="bugku-crypto-easy_hash_20261006.html">[CRYPTO] easy_hash</a></li>
+    </ul>
+    <div class="pagination" id="pagebox"></div>
+  </div>
+</div>
+<script>
+const listDom=document.getElementById("list");
+const pageBox=document.getElementById("pagebox");
+const items=Array.from(listDom.children);
+const perPage=15;
+let cur=1;
+function render(){
+  const total=Math.ceil(items.length/perPage);
+  listDom.innerHTML="";
+  const start=(cur‑1)*perPage;
+  const end=start+perPage;
+  items.slice(start,end).forEach(i=>listDom.appendChild(i));
+  pageBox.innerHTML="";
+  for(let p=1;p<=total;p++){
+    const btn=document.createElement("button");
+    btn.innerText=p;
+    if(p===cur)btn.classList.add("active");
+    btn.onclick=()=>{cur=p;render();};
+    pageBox.appendChild(btn);
+  }
+}
+render();
+</script>
 </body>
 </html>
