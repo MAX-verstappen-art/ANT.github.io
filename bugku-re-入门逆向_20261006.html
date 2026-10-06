@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="zh‑CN">
+<head>
+<meta charset="UTF‑8">
+<meta name="viewport" content="width=device‑width, initial‑scale=1.0">
+<title>Bugku‑入门逆向 Writeup</title>
+<style>
+*{margin:0;padding:0;box‑sizing:border‑box;font‑family:"Segoe UI",Consolas,monospace;}
+body{background:#0f1118;color:#e2e8f0;padding:24px;line‑height:1.8;}
+.container{max‑width:900px;margin:0 auto;}
+.back{margin‑bottom:16px;}
+.back a{color:#7dd3fc;text‑decoration:none;}
+.back a:hover{text‑decoration:underline;}
+.glass{background:rgba(30,41,59,0.65);backdrop‑filter:blur(12px);border:1px solid rgba(148,163,184,0.2);border‑radius:14px;padding:28px;}
+h1{color:#7dd3fc;margin‑bottom:12px;font‑size:22px;}
+.tag{display:inline‑block;background:#1e3a5f;color:#7dd3fc;padding:2px 8px;border‑radius:4px;font‑size:13px;margin‑bottom:20px;}
+h2{color:#93c5fd;font‑size:17px;margin:22px 0 10px;}
+pre{background:#0b1220;padding:14px;border‑radius:8px;overflow‑x:auto;border:1px solid #334155;margin:12px 0;}
+code{color:#a5f3fc;font‑family:Consolas;}
+.note{background:rgba(30,64,100,0.35);border‑left:3px solid #38bdf8;padding:10px 14px;border‑radius:0 8px 8px 0;margin:14px 0;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="back"><a href="index.html">← 返回首页</a></div>
+  <div class="glass">
+    <h1>入门逆向</h1>
+    <div class="tag">RE | Bugku</div>
+    <main>
+      <h2>题目描述</h2>
+      <p>Windows exe程序，运行提示输入密码，正确输出flag。</p>
+      <h2>考点</h2>
+      <p>简单逆向分析，IDA静态分析，字符串查找</p>
+      <h2>解题过程</h2>
+      <p>1.使用IDA Pro载入exe，Shift+F12打开字符串窗口。</p>
+      <p>2.搜索flag相关字符串，找到比对密码与flag。</p>
+      <p>3.运行程序输入正确密码得到flag。</p>
+<pre><code>#工具
+IDA Pro / x32dbg
+</code></pre>
+      <h2>Flag</h2>
+      <div class="note"><code>flag{re_easy_beginner}</code></div>
+      <h2>总结踩坑</h2>
+      <p>32位程序用32位调试器，不要混用64位工具。</p>
+    </main>
+  </div>
+</div>
+</body>
+</html>
