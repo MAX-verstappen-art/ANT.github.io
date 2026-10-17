@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<title>CTFHub - HTTP Method Writeup</title>
+<style>
+body {font-family: "Microsoft Yahei",sans-serif;max-width:960px;margin:2rem auto;padding:0 1rem;color:#222;background:#f8f9fa;}
+h1,h2,h3 {color:#111;border-left:4px solid #228be6;padding-left:12px;}
+pre {background:#212529;color:#e9ecef;padding:1rem;overflow-x:auto;border-radius:6px;}
+code {background:#e2e5e8;padding:2px 4px;border-radius:3px;}
+.note {background:#e7f5ff;padding:10px;border-left:4px solid #339af0;}
+</style>
+</head>
+<body>
+<h1>CTFHub HTTP Method</h1>
+<p>分类：Web｜考点：自定义HTTP请求方法</p>
+
+<h2>题目描述</h2>
+<p>访问页面返回提示：</p>
+<pre>
+HTTP Method is GET
+Use CTF**B Method, I will give you flag.
+Hint: If you got 「HTTP Method Not Allowed」 Error, you should request index.php.
+</pre>
+
+<h2>思路分析</h2>
+<p>HTTP请求行格式：<code>请求方法 资源路径 HTTP/版本</code>。HTTP协议允许自定义请求方法，不限于GET、POST、PUT、DELETE。</p>
+<p>提示里的 <code>CTF**B</code> 就是 <code>CTFHUB</code>。后端PHP读取 <code>$_SERVER['REQUEST_METHOD']</code> 判断请求方法，当请求方法等于 <code>CTFHUB</code> 时输出flag。</p>
+<div class="note">
+提示重点：使用自定义方法访问根路径 <code>/</code> 会返回405 Method Not Allowed，必须直接请求 <code>/index.php</code>。
+</div>
+<p>后端伪代码：</p>
+<pre>
+&lt;?php
+$req_method = $_SERVER['REQUEST_METHOD'];
+if($req_method === "CTFHUB"){
+    echo $flag;
+}else{
+    echo "HTTP Method is {$req_method}\nUse CTFHUB Method, I will give you flag.";
+}
+?&gt;
+</pre>
+
+<h2>解题过程</h2>
+<h3>方法一：Burp Suite</h3>
+<p>1. 开启代理抓包，浏览器访问靶场链接，捕获GET请求。</p>
+<p>2. 修改原始请求行：</p>
+<pre>GET / HTTP/1.1</pre>
+<p>改为：</p>
+<pre>CTFHUB /index.php HTTP/1.1</pre>
+<p>完整请求包：</p>
+<pre>
+CTFHUB /index.php HTTP/1.1
+Host: challenge-f3c04b4c0404356b.sandbox.ctfhub.com:10800
+Accept-Language: zh-CN,zh;q=0.9
+Upgrade-Insecure-Requests: 1
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.6723.70 Safari/537.36
+Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
+Accept-Encoding: gzip, deflate, br
+Connection: keep-alive
+</pre>
+<p>3. 将数据包发送到Repeater，点击发送，在响应包中获取flag。</p>
+
+<h3>方法二：curl命令</h3>
+<pre>curl -X CTFHUB http://challenge-f3c04b4c0404356b.sandbox.ctfhub.com:10800/index.php</pre>
+
+<h2>知识点总结</h2>
+<ul>
+<li>HTTP请求方法可以自定义，并非只有GET、POST等标准方法。</li>
+<li>PHP通过 <code>$_SERVER['REQUEST_METHOD']</code> 获取客户端提交的HTTP请求方法。</li>
+<li>Web服务器对根路径 <code>/</code> 和直接访问 <code>index.php</code> 的请求方法校验规则存在差异，需要按题目Hint指定访问资源。</li>
+</ul>
+
+</body>
+</html>
