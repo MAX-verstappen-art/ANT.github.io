@@ -1,75 +1,214 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="utf-8">
-<title>CTFHub - HTTP Method</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>CTFHub HTTP Method Writeup</title>
 <style>
-body {font-family: "Microsoft Yahei",sans-serif;max-width:960px;margin:2rem auto;padding:0 1rem;color:#222;background:#f8f9fa;}
-h1,h2,h3 {color:#111;border-left:4px solid #228be6;padding-left:12px;}
-pre {background:#212529;color:#e9ecef;padding:1rem;overflow-x:auto;border-radius:6px;}
-code {background:#e2e5e8;padding:2px 4px;border-radius:3px;}
-.note {background:#e7f5ff;padding:10px;border-left:4px solid #339af0;}
+  :root {
+    --bg: #0d1117;
+    --bg-soft: #161b22;
+    --bg-card: #1a2030;
+    --border: #2a3142;
+    --text: #e6edf3;
+    --text-muted: #8b949e;
+    --accent: #58a6ff;
+    --accent-2: #bc8cff;
+    --code-bg: #0b1020;
+    --code-text: #c9d1d9;
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    padding: 40px 20px;
+  }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    background: var(--bg-soft);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 40px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+  }
+
+  .back {
+    display: inline-block;
+    color: var(--text-muted);
+    font-size: 14px;
+    text-decoration: none;
+    margin-bottom: 20px;
+    transition: color 0.2s;
+  }
+
+  .back:hover {
+    color: var(--accent);
+  }
+
+  .tag {
+    display: inline-block;
+    padding: 4px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    background: linear-gradient(135deg, rgba(88,166,255,.18), rgba(188,140,255,.18));
+    color: var(--accent);
+    border: 1px solid rgba(88,166,255,.35);
+    margin-bottom: 16px;
+  }
+
+  h1 {
+    font-size: 30px;
+    margin-bottom: 12px;
+    color: #f0f6fc;
+  }
+
+  .meta {
+    color: var(--text-muted);
+    font-size: 14px;
+    margin-bottom: 30px;
+  }
+
+  h2 {
+    font-size: 20px;
+    margin: 36px 0 14px;
+    padding-left: 12px;
+    border-left: 4px solid var(--accent);
+    color: #f0f6fc;
+  }
+
+  p {
+    color: var(--text);
+    margin-bottom: 14px;
+  }
+
+  code {
+    background: var(--code-bg);
+    color: var(--accent-2);
+    padding: 2px 7px;
+    border-radius: 6px;
+    font-family: "Fira Code", Consolas, "Courier New", monospace;
+    font-size: 14px;
+    border: 1px solid var(--border);
+  }
+
+  pre {
+    background: var(--code-bg);
+    color: var(--code-text);
+    padding: 20px;
+    border-radius: 10px;
+    overflow-x: auto;
+    font-family: "Fira Code", Consolas, "Courier New", monospace;
+    font-size: 14px;
+    line-height: 1.6;
+    border: 1px solid var(--border);
+    margin: 16px 0;
+  }
+
+  pre code {
+    background: transparent;
+    color: inherit;
+    padding: 0;
+    border: none;
+  }
+
+  .tip {
+    background: rgba(88, 166, 255, 0.08);
+    border-left: 4px solid var(--accent);
+    padding: 14px 18px;
+    border-radius: 8px;
+    color: var(--text);
+    margin: 18px 0;
+  }
+
+  ul {
+    padding-left: 20px;
+    margin-bottom: 14px;
+  }
+
+  li {
+    margin-bottom: 8px;
+  }
+
+  .code-block-title {
+    font-size: 13px;
+    color: var(--text-muted);
+    margin-bottom: 8px;
+  }
+
+  @media (max-width: 768px) {
+    .container {
+      padding: 24px;
+    }
+
+    h1 {
+      font-size: 24px;
+    }
+  }
 </style>
 </head>
 <body>
-<h1>CTFHub HTTP Method</h1>
-<p>分类：Web｜考点：自定义HTTP请求方法</p>
+  <div class="container">
+    <a href="index.html" class="back">← 返回题目列表</a>
 
-<h2>题目描述</h2>
-<p>访问页面返回提示：</p>
-<pre>
-HTTP Method is GET
-Use CTF**B Method, I will give you flag.
-Hint: If you got 「HTTP Method Not Allowed」 Error, you should request index.php.
-</pre>
+    <span class="tag">[WEB] HTTP Method</span>
 
-<h2>思路分析</h2>
-<p>HTTP请求行格式：<code>请求方法 资源路径 HTTP/版本</code>。HTTP协议允许自定义请求方法，不限于GET、POST、PUT、DELETE。</p>
-<p>提示里的 <code>CTF**B</code> 就是 <code>CTFHUB</code>。后端PHP读取 <code>$_SERVER['REQUEST_METHOD']</code> 判断请求方法，当请求方法等于 <code>CTFHUB</code> 时输出flag。</p>
-<div class="note">
-提示重点：使用自定义方法访问根路径 <code>/</code> 会返回405 Method Not Allowed，必须直接请求 <code>/index.php</code>。
-</div>
-<p>后端伪代码：</p>
-<pre>
-&lt;?php
-$req_method = $_SERVER['REQUEST_METHOD'];
-if($req_method === "CTFHUB"){
-    echo $flag;
-}else{
-    echo "HTTP Method is {$req_method}\nUse CTFHUB Method, I will give you flag.";
-}
-?&gt;
-</pre>
+    <h1>CTFHub HTTP Method Writeup</h1>
+    <div class="meta">
+      分类：Web | 考点：自定义 HTTP 请求方法 | 更新时间：2026-10-17
+    </div>
 
-<h2>解题过程</h2>
-<h3>方法一：Burp Suite</h3>
-<p>1. 开启代理抓包，浏览器访问靶场链接，捕获GET请求。</p>
-<p>2. 修改原始请求行：</p>
-<pre>GET / HTTP/1.1</pre>
-<p>改为：</p>
-<pre>CTFHUB /index.php HTTP/1.1</pre>
-<p>完整请求包：</p>
-<pre>
-CTFHUB /index.php HTTP/1.1
-Host: challenge-f3c04b4c0404356b.sandbox.ctfhub.com:10800
-Accept-Language: zh-CN,zh;q=0.9
-Upgrade-Insecure-Requests: 1
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.6723.70 Safari/537.36
-Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7
-Accept-Encoding: gzip, deflate, br
-Connection: keep-alive
-</pre>
-<p>3. 将数据包发送到Repeater，点击发送，在响应包中获取flag。</p>
+    <h2>题目描述</h2>
+    <p>题目提示使用特殊的 HTTP 请求方法访问页面。抓包后发现浏览器当前使用的是 <code>GET</code> 方法，而题目要求使用 <code>CTFHUB</code> 方法访问 <code>index.php</code>。</p>
 
-<h3>方法二：curl命令</h3>
-<pre>curl -X CTFHUB http://challenge-f3c04b4c0404356b.sandbox.ctfhub.com:10800/index.php</pre>
+    <h2>考点</h2>
+    <ul>
+      <li>HTTP 请求方法</li>
+      <li><code>$_SERVER['REQUEST_METHOD']</code></li>
+      <li>405 Method Not Allowed</li>
+    </ul>
 
-<h2>知识点总结</h2>
-<ul>
-<li>HTTP请求方法可以自定义，并非只有GET、POST等标准方法。</li>
-<li>PHP通过 <code>$_SERVER['REQUEST_METHOD']</code> 获取客户端提交的HTTP请求方法。</li>
-<li>Web服务器对根路径 <code>/</code> 和直接访问 <code>index.php</code> 的请求方法校验规则存在差异，需要按题目Hint指定访问资源。</li>
-</ul>
+    <h2>思路分析</h2>
+    <p>HTTP 协议并不限制请求方法只能是 <code>GET</code>、<code>POST</code>、<code>PUT</code> 等标准方法。后端 PHP 可以通过 <code>$_SERVER['REQUEST_METHOD']</code> 获取客户端使用的请求方法。</p>
+    <p>这道题的核心逻辑是：当请求方法等于 <code>CTFHUB</code>，并且直接访问 <code>index.php</code> 时，后端返回 flag。</p>
 
+    <div class="tip">
+      <strong>提示：</strong>如果直接使用自定义方法访问根路径 <code>/</code>，可能会触发 405 Method Not Allowed。题目提示说明，应直接请求 <code>/index.php</code>。
+    </div>
+
+    <h2>解题过程</h2>
+    <p>1. 使用 Burp Suite 捕获浏览器访问靶场的请求。</p>
+    <p>2. 将原始请求行：</p>
+<pre><code>GET / HTTP/1.1</code></pre>
+    <p>修改为：</p>
+<pre><code>CTFHUB /index.php HTTP/1.1</code></pre>
+    <p>3. 将修改后的请求发送到 Repeater，点击发送，即可在响应中得到 flag。</p>
+
+    <h2>Python 脚本验证</h2>
+    <p class="code-block-title">使用 requests 发送自定义 HTTP 方法：</p>
+<pre><code>import requests
+
+url = "http://challenge-f3c04b4c0404356b.sandbox.ctfhub.com:10800/index.php"
+resp = requests.request(method="CTFHUB", url=url)
+
+print(resp.status_code)
+print(resp.text)</code></pre>
+
+    <h2>总结</h2>
+    <ul>
+      <li>HTTP 请求方法可以自定义，后端会按 <code>REQUEST_METHOD</code> 的值进行判断。</li>
+      <li>遇到 405 时，除了修改方法，还要注意题目是否要求访问特定文件。</li>
+      <li>Burp Suite 的 Repeater 适合用来调试和验证这类 HTTP 方法逻辑。</li>
+    </ul>
+  </div>
 </body>
 </html>
